@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Services — Ferron Construction SG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<main id="page"></main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+  /* Route: service.html?s={slug}[&area={slug}]
+     Laravel equivalent: /services/{service} and /services/{service}/{location} */
+  renderLayout("services");
+  const s = svcBySlug(params.get("s")) || SERVICES[0];
+  const area = locBySlug(params.get("area"));
+  const where = area ? area.name : "Singapore";
+  document.title = `${s.name} in ${where} — Ferron Construction SG`;
+
+  $("#page").innerHTML = `
+  <section class="page-hero">
+    <div class="container">
+      <nav class="crumbs"><a href="index.html">Home</a><i>/</i><a href="index.html#services">Services</a><i>/</i>
+        ${area ? `<a href="service.html?s=${s.slug}">${s.name}</a><i>/</i><span>${area.name}</span>` : `<span>${s.name}</span>`}</nav>
+      <div class="page-hero-grid">
+        <div>
+          <span class="eyebrow">${area ? `${area.region} · ${area.name}` : "Island-wide service"}</span>
+          <h1 class="display h1" style="margin-top:20px;font-size:clamp(46px,7vw,104px)">${s.name}<br><span class="serif ember">in ${where}.</span></h1>
+        </div>
+        <div style="display:grid;gap:24px">
+          <p class="lead">${s.summary}</p>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+            <div class="price-pill"><small>From</small><b>S$${s.from}</b><small>${s.unit || "/job"}</small></div>
+            <a class="btn btn-ember btn-lg" href="index.html?svc=${s.slug}#quote">Book now ${icon("arrow")}</a>
+          </div>
+        </div>
+      </div>
+      <div class="page-hero-media"><img data-parallax src="${s.img.replace("w=1200", "w=2000")}" alt="${s.name} in ${where}"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container detail-grid">
+      <div>
+        <span class="eyebrow reveal">What's included</span>
+        <h2 class="display h2 reveal" style="margin-top:20px;font-size:clamp(34px,4vw,56px)">Done properly, <span class="serif">the first time.</span></h2>
+        <div class="include-grid">${s.includes.map((i, n) => `<div class="include reveal" style="--d:${n * 0.05}s">${icon("check")}${i}</div>`).join("")}</div>
+
+        <div style="margin-top:72px">
+          <span class="eyebrow reveal">Our process</span>
+          <div class="process" style="margin-top:28px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+            ${[["Book", "WhatsApp photos or fill the form"], ["Confirm", "Coordinator locks in your slot"], ["Quote", "Firm price before any work"], ["Done", "Clean-up & warranty issued"]]
+              .map(([h, p], i) => `<div class="step reveal" style="min-height:220px;--d:${i * 0.08}s"><span class="step-n" style="font-size:64px">0${i + 1}</span><div><h3>${h}</h3><p>${p}</p></div></div>`).join("")}
+          </div>
+        </div>
+
+        <div style="margin-top:72px">
+          <span class="eyebrow reveal">What clients say</span>
+          <div class="carousel" style="margin-top:28px">${TESTIMONIALS.map(reviewCard).join("")}</div>
+        </div>
+      </div>
+
+      <aside>
+        <form class="side-card" id="sideForm">
+          <h3>Get a fixed quote</h3>
+          <p>Reply in ~15 min · 7 days a week</p>
+          <div class="field"><label>Service</label><select id="sfSvc">${SERVICES.map((x) => `<option value="${x.slug}" ${x.slug === s.slug ? "selected" : ""}>${x.name}</option>`).join("")}</select></div>
+          <div class="field"><label>Area</label><select id="sfArea">${LOCATIONS.map((l) => `<option ${area && l.slug === area.slug ? "selected" : ""}>${l.name}</option>`).join("")}</select></div>
+          <div class="field"><label>Mobile</label><input type="tel" placeholder="+65 9123 4567"></div>
+          <button class="btn btn-ember btn-lg" type="submit">Request quote ${icon("arrow")}</button>
+          <div class="or">or</div>
+          <a class="btn btn-wa btn-lg" target="_blank" rel="noopener" href="${waLink(`Hi Ferron, I need ${s.name} in ${where}.`)}">${WA_ICON} WhatsApp instantly</a>
+          <div class="side-meta">
+            <div>${icon("clock")} ${area ? `~${area.eta} min arrival in ${area.name}` : "Same-day slots available"}</div>
+            <div>${icon("award")} Licensed &amp; insured technicians</div>
+            <div>${icon("shield")} Workmanship warranty included</div>
+          </div>
+        </form>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-head split">
+        <h2 class="display h2 reveal" style="font-size:clamp(34px,4vw,56px)">${s.name} <span class="serif">near you</span></h2>
+        <p class="lead reveal">Same crew, same standards — in every neighbourhood.</p>
+      </div>
+      <div class="nearby reveal">${LOCATIONS.map((l) => `<a class="chip ${area && l.slug === area.slug ? "active" : ""}" href="service.html?s=${s.slug}&area=${l.slug}">${icon("pin")} ${l.name}</a>`).join("")}</div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <h2 class="display h2 reveal" style="font-size:clamp(34px,4vw,56px);margin-bottom:40px">Other services</h2>
+      <div class="related">${SERVICES.filter((x) => x.slug !== s.slug).slice(0, 4).map((x) => serviceCard(x, area ? `&area=${area.slug}` : "")).join("")}</div>
+    </div>
+  </section>`;
+
+  $("#sideForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    e.target.innerHTML = `<div class="wz-done" style="padding:20px 0"><div class="ok">${icon("check")}</div><h3>Request received</h3><p>We'll WhatsApp your quote shortly.</p></div>`;
+  });
+
+  initReveal();
+  initParallax();
+</script>
+</body>
+</html>

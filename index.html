@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ferron Construction SG — Home Repairs & Renovation Across Singapore</title>
+  <meta name="description" content="Licensed electricians, plumbers, painters and contractors across Singapore. Same-day service, transparent pricing, free quotes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<main>
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-badge">
+            <span class="avatars"><span style="background:#ff5b1f">RT</span><span style="background:#141311">DL</span><span style="background:#5b6cff">PN</span></span>
+            Rated <b>4.9/5</b> by 1,700+ Singapore homes
+          </div>
+          <h1 class="display h1">
+            <span class="line"><span>Build it right.</span></span>
+            <span class="line"><span>Fix it <span class="serif ember">fast.</span></span></span>
+          </h1>
+        </div>
+        <div class="hero-side">
+          <p class="lead">Licensed electricians, plumbers, painters and carpenters on call across every Singapore neighbourhood — with upfront pricing and a workmanship warranty on every job.</p>
+          <div class="hero-actions">
+            <a class="btn btn-ember btn-lg" href="#quote">Get a free quote <i data-i="arrow"></i></a>
+            <a class="btn btn-wa btn-lg" id="heroWa" target="_blank" rel="noopener">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-media">
+        <img data-parallax src="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=2000&q=80&auto=format&fit=crop" alt="Construction cranes beside modern Singapore towers">
+        <div class="hero-float"><span class="hf-ico" id="hfIco"></span><div><b>~30 min</b><span>Average arrival time</span></div></div>
+        <div class="hero-float right"><span class="hf-ico" style="background:#fff;color:#141311" id="hfIco2"></span><div><b>3–5 yr</b><span>Warranty on waterproofing</span></div></div>
+
+        <form class="finder" id="finder">
+          <label><small>Service</small><select id="fService"></select></label>
+          <label><small>Your area</small><select id="fArea"></select></label>
+          <label><small>Property</small>
+            <select id="fProp"><option>HDB flat</option><option>Condo / EC</option><option>Landed</option><option>Commercial</option></select>
+          </label>
+          <button class="btn btn-ember" type="submit">Find a pro</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
+
+  <!-- ============ ABOUT / STATS ============ -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">Why Ferron</span>
+          <h2 class="display h2 reveal" style="margin-top:20px">One trusted crew for <span class="serif">every</span> fix, upgrade &amp; renovation.</h2>
+        </div>
+        <p class="lead reveal">From a tripped circuit at midnight to a full kitchen makeover, our in-house team handles it end-to-end — no subcontractor roulette, no surprise invoices.</p>
+      </div>
+      <div class="stats">
+        <div class="stat reveal"><b><span data-count="12">0</span><sup>+</sup></b><span>Years serving Singapore</span></div>
+        <div class="stat reveal" style="--d:.1s"><b><span data-count="18500">0</span><sup>+</sup></b><span>Jobs completed</span></div>
+        <div class="stat reveal" style="--d:.2s"><b><span data-count="4.9" data-dec="1">0</span><sup>★</sup></b><span>Average from 1,745 reviews</span></div>
+        <div class="stat reveal" style="--d:.3s"><b><span data-count="28">0</span><sup>+</sup></b><span>Neighbourhoods covered</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES ============ -->
+  <section class="section" id="services" style="padding-top:0">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">Services</span>
+          <h2 class="display h2 reveal" style="margin-top:20px">Everything your home needs, <span class="serif ember">under one roof.</span></h2>
+        </div>
+        <p class="lead reveal">Tap any service for scope, pricing and instant booking. Every job is quoted upfront and backed by our workmanship guarantee.</p>
+      </div>
+      <div class="bento" id="bento"></div>
+    </div>
+  </section>
+
+  <!-- ============ LOCATIONS ============ -->
+  <section class="section" id="locations" style="padding-top:0">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">Service areas</span>
+          <h2 class="display h2 reveal" style="margin-top:20px">Wherever you are in Singapore, <span class="serif">we're nearby.</span></h2>
+        </div>
+        <p class="lead reveal">Regional crews stationed across the island mean faster arrivals and local know-how — from HDB estates in Punggol to landed homes in Bukit Timah.</p>
+      </div>
+      <div class="loc-wrap">
+        <div class="reveal">
+          <div class="loc-search">
+            <i data-i="search"></i>
+            <input id="locSearch" type="search" placeholder="Search your neighbourhood…" autocomplete="off" aria-label="Search area">
+          </div>
+          <div class="region-filter" id="regionFilter"></div>
+          <div class="area-list" id="areaList"></div>
+          <div class="loc-panel" id="locPanel">
+            <span class="eyebrow" style="color:rgba(255,255,255,.7)">Selected area</span>
+            <b id="lpName">Pick an area</b>
+            <p id="lpMeta">Hover the map or choose from the list to see local response times.</p>
+            <a class="btn btn-ember" id="lpLink" href="#locations">View area page</a>
+          </div>
+        </div>
+        <div class="sg-map reveal" style="--d:.15s">
+          <div id="sgMap"></div>
+          <div class="map-legend"><span><i></i> Service hub</span><span><i class="e"></i> Selected</span><span>All 5 regions · 7 days a week</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BEFORE / AFTER ============ -->
+  <section class="section ba-section" id="transform">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">The Ferron difference</span>
+          <h2 class="display h2 reveal" style="margin-top:20px">Drag to see the <span class="serif ember">transformation.</span></h2>
+        </div>
+        <p class="lead reveal">A 25-year-old 4-room HDB in Toa Payoh — rewired, repainted, re-floored and fitted with custom carpentry in just 19 working days.</p>
+      </div>
+      <div class="ba reveal" id="ba">
+        <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1800&q=80&auto=format&fit=crop" alt="After renovation">
+        <img class="before" src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1800&q=80&auto=format&fit=crop" alt="Before renovation">
+        <span class="ba-tag l">Before</span><span class="ba-tag r">After</span>
+        <div class="ba-handle"></div>
+      </div>
+      <div class="ba-meta">
+        <div class="reveal"><small>Scope</small><b>Full home refresh</b></div>
+        <div class="reveal" style="--d:.08s"><small>Timeline</small><b>19 working days</b></div>
+        <div class="reveal" style="--d:.16s"><small>Services</small><b>Electrical · Paint · Floor</b></div>
+        <div class="reveal" style="--d:.24s"><small>Client rating</small><b>★★★★★</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS ============ -->
+  <section class="section" id="process">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">How it works</span>
+          <h2 class="display h2 reveal" style="margin-top:20px">Four steps. <span class="serif">Zero</span> headaches.</h2>
+        </div>
+        <p class="lead reveal">A simple, transparent process — so you always know what's happening, who's coming, and what it costs.</p>
+      </div>
+      <div class="process">
+        <div class="step reveal"><span class="step-n">01</span><div><span class="time"><i data-i="clock"></i> 2 min</span><h3>Book online</h3><p>Tell us what's wrong via the form or WhatsApp — photos help us quote faster.</p></div></div>
+        <div class="step reveal" style="--d:.1s"><span class="step-n">02</span><div><span class="time"><i data-i="clock"></i> 15 min</span><h3>We confirm</h3><p>A coordinator calls back to confirm details and lock in a slot that suits you.</p></div></div>
+        <div class="step reveal" style="--d:.2s"><span class="step-n">03</span><div><span class="time"><i data-i="clock"></i> On-site</span><h3>Fixed quote</h3><p>Our technician inspects and gives a firm price. No work starts until you approve.</p></div></div>
+        <div class="step reveal" style="--d:.3s"><span class="step-n">04</span><div><span class="time"><i data-i="clock"></i> Same day</span><h3>Job done</h3><p>Work completed, site cleaned, warranty issued. Pay by PayNow, card or cash.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section class="section" id="projects" style="padding-top:0">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">Recent work</span>
+          <h2 class="display h2 reveal" style="margin-top:20px">Homes we've <span class="serif ember">brought back</span> to life.</h2>
+        </div>
+        <p class="lead reveal">A snapshot of recent projects from across the island. Every photo is from a real Ferron job site.</p>
+      </div>
+      <div class="projects" id="projectGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ REVIEWS ============ -->
+  <section class="section" id="reviews">
+    <div class="container">
+      <div class="reviews-head">
+        <div>
+          <span class="eyebrow reveal">Reviews</span>
+          <h2 class="display h2 reveal" style="margin-top:20px;max-width:14ch">Loved by neighbours <span class="serif">island-wide.</span></h2>
+        </div>
+        <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap" class="reveal">
+          <div class="rating"><b>4.9</b><div><div class="stars" id="ratingStars"></div><span class="muted" style="font-size:13px">1,745 Google reviews</span></div></div>
+          <div class="car-nav"><button id="carPrev" aria-label="Previous"></button><button id="carNext" aria-label="Next"></button></div>
+        </div>
+      </div>
+      <div class="carousel" id="carousel"></div>
+    </div>
+  </section>
+
+  <!-- ============ QUOTE ============ -->
+  <section class="section" id="quote" style="padding-top:0">
+    <div class="container">
+      <div class="quote">
+        <div>
+          <span class="eyebrow reveal">Free quotation</span>
+          <h2 class="display h2 reveal" style="margin-top:20px">Get your price in <span class="serif ember">60 seconds.</span></h2>
+          <p class="lead reveal" style="margin-top:20px">Answer three quick questions and we'll send an itemised estimate on WhatsApp — usually within 15 minutes.</p>
+          <div class="quote-perks">
+            <div class="perk reveal"><span class="pk-ico" data-i="tag"></span><div><b>Transparent pricing</b><span>Itemised quote. No hidden charges or call-out surprises.</span></div></div>
+            <div class="perk reveal"><span class="pk-ico" data-i="award"></span><div><b>Licensed &amp; insured</b><span>EMA, PUB licensed and BCA registered professionals.</span></div></div>
+            <div class="perk reveal"><span class="pk-ico" data-i="shield"></span><div><b>Workmanship warranty</b><span>Every job covered — up to 5 years on waterproofing.</span></div></div>
+          </div>
+        </div>
+
+        <form class="wizard reveal" id="wizard" novalidate>
+          <div class="wz-progress"><i class="done"></i><i></i><i></i></div>
+
+          <div class="wz-step on" data-step="1">
+            <h3>What do you need help with?</h3>
+            <p>Pick the closest match — you can add details later.</p>
+            <div class="opt-grid c4" id="wzServices"></div>
+          </div>
+
+          <div class="wz-step" data-step="2">
+            <h3>Tell us about your place</h3>
+            <p>This helps us send the right crew and estimate accurately.</p>
+            <div class="opt-grid" style="margin-bottom:16px">
+              <label class="opt"><input type="radio" name="prop" value="HDB flat" data-m="1" checked><span>HDB flat<small>3 to 5-room, executive</small></span></label>
+              <label class="opt"><input type="radio" name="prop" value="Condo / EC" data-m="1.15"><span>Condo / EC<small>MCST approvals handled</small></span></label>
+              <label class="opt"><input type="radio" name="prop" value="Landed" data-m="1.35"><span>Landed<small>Terrace, semi-D, bungalow</small></span></label>
+              <label class="opt"><input type="radio" name="prop" value="Commercial" data-m="1.5"><span>Commercial<small>Office, retail, F&amp;B</small></span></label>
+            </div>
+            <div class="field-row">
+              <div class="field"><label for="wzArea">Area</label><select id="wzArea"></select></div>
+              <div class="field"><label for="wzWhen">When?</label>
+                <select id="wzWhen"><option>Emergency (ASAP)</option><option selected>Within this week</option><option>Next 2–4 weeks</option><option>Just planning</option></select>
+              </div>
+            </div>
+            <div class="est"><span>Estimated starting price</span><b id="wzEst">—</b></div>
+          </div>
+
+          <div class="wz-step" data-step="3">
+            <h3>Where should we send your quote?</h3>
+            <p>We'll reply on WhatsApp. No spam, ever.</p>
+            <div class="field-row">
+              <div class="field"><label for="wzName">Name</label><input id="wzName" required placeholder="Jane Tan"></div>
+              <div class="field"><label for="wzPhone">Mobile</label><input id="wzPhone" required type="tel" placeholder="+65 9123 4567"></div>
+            </div>
+            <div class="field"><label for="wzNote">Describe the job (optional)</label><textarea id="wzNote" placeholder="e.g. Kitchen sink leaking under the cabinet since yesterday"></textarea></div>
+          </div>
+
+          <div class="wz-step" data-step="4">
+            <div class="wz-done">
+              <div class="ok" id="okIco"></div>
+              <h3>You're all set, <span id="doneName">friend</span>!</h3>
+              <p class="muted" style="margin:8px auto 24px;max-width:40ch">A coordinator will WhatsApp your itemised quote within 15 minutes. Want it faster? Chat with us now.</p>
+              <a class="btn btn-wa btn-lg" id="doneWa" target="_blank" rel="noopener">Continue on WhatsApp</a>
+            </div>
+          </div>
+
+          <div class="wz-foot" id="wzFoot">
+            <button type="button" class="wz-back" id="wzBack" hidden>← Back</button>
+            <button type="button" class="btn btn-ember btn-lg" id="wzNext">Continue</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section" id="faq" style="padding-top:0">
+    <div class="container faq-wrap">
+      <div>
+        <span class="eyebrow reveal">FAQ</span>
+        <h2 class="display h2 reveal" style="margin-top:20px">Questions? <span class="serif">Answered.</span></h2>
+        <div class="faq-card reveal">
+          <b style="font:600 22px/1.2 var(--f-display)">Still unsure?</b>
+          <p>Our coordinators reply within minutes, 7 days a week.</p>
+          <div class="btns"><a class="btn btn-wa" id="faqWa" target="_blank" rel="noopener">WhatsApp</a><a class="btn btn-light" id="faqCall">Call us</a></div>
+        </div>
+      </div>
+      <div class="faq" id="faqList"></div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="container">
+    <div class="cta-big reveal">
+      <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1800&q=70&auto=format&fit=crop" alt="">
+      <div class="row">
+        <div>
+          <h2 class="display h2">Something broke? Let's fix it <span class="serif">today.</span></h2>
+          <p class="lead">24/7 emergency crews on standby across all five regions.</p>
+        </div>
+        <div class="actions">
+          <a class="btn btn-lg" id="ctaCall"></a>
+          <a class="btn btn-wa btn-lg" id="ctaWa" target="_blank" rel="noopener">WhatsApp us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/home.js"></script>
+</body>
+</html>

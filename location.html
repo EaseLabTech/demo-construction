@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Service Areas — Ferron Construction SG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<main id="page"></main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+  /* Route: location.html?area={slug}
+     Laravel equivalent: /areas/{location} */
+  renderLayout("locations");
+  const l = locBySlug(params.get("area")) || LOCATIONS[0];
+  const nearby = LOCATIONS.filter((x) => x.region === l.region && x.slug !== l.slug);
+  const localReviews = [...TESTIMONIALS].sort((a, b) => (b.area.startsWith(l.name)) - (a.area.startsWith(l.name)));
+  document.title = `Home Repairs & Renovation in ${l.name} — Ferron Construction SG`;
+
+  $("#page").innerHTML = `
+  <section class="page-hero">
+    <div class="container">
+      <nav class="crumbs"><a href="index.html">Home</a><i>/</i><a href="index.html#locations">Areas</a><i>/</i><span>${l.region}</span><i>/</i><span>${l.name}</span></nav>
+      <div class="page-hero-grid">
+        <div>
+          <span class="eyebrow">${l.region} region</span>
+          <h1 class="display h1" style="margin-top:20px;font-size:clamp(46px,7vw,104px)">Your local crew<br>in <span class="serif ember">${l.name}.</span></h1>
+        </div>
+        <div style="display:grid;gap:24px">
+          <p class="lead">Electrical, plumbing, painting, waterproofing and more for ${l.homes.replaceAll(" · ", ", ")} homes in ${l.name}. Our ${l.region} team is stationed minutes away.</p>
+          <div class="loc-stats">
+            <div><b>~${l.eta}m</b><span>Avg. arrival</span></div>
+            <div><b>${(l.name.length * 37 + 180).toLocaleString()}</b><span>Jobs in ${l.name}</span></div>
+            <div><b>4.9★</b><span>Local rating</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container detail-grid">
+      <div>
+        <span class="eyebrow reveal">Services in ${l.name}</span>
+        <h2 class="display h2 reveal" style="margin:20px 0 36px;font-size:clamp(34px,4vw,56px)">What can we <span class="serif">fix today?</span></h2>
+        <div class="svc-rows">
+          ${SERVICES.map((s, i) => `
+            <a class="svc-row reveal" style="--d:${i * 0.04}s" href="service.html?s=${s.slug}&area=${l.slug}">
+              <img src="${s.img.replace("w=1200", "w=300")}" alt="" loading="lazy">
+              <div><b>${s.name} in ${l.name}</b><small>${s.tagline} · ${priceLabel(s)}</small></div>
+              <span class="go">${icon("arrowUR")}</span>
+            </a>`).join("")}
+        </div>
+
+        <div class="sg-map reveal" style="margin-top:72px"><div id="sgMap"></div>
+          <div class="map-legend"><span><i class="e"></i> ${l.name}</span><span><i></i> Nearby hubs</span></div></div>
+
+        <div style="margin-top:72px">
+          <span class="eyebrow reveal">Reviews from ${l.region}</span>
+          <div class="carousel" style="margin-top:28px">${localReviews.map(reviewCard).join("")}</div>
+        </div>
+      </div>
+
+      <aside>
+        <form class="side-card" id="sideForm">
+          <h3>Book in ${l.name}</h3>
+          <p>Next available slot: <b style="color:#fff">today, 2–4pm</b></p>
+          <div class="field"><label>Service</label><select>${SERVICES.map((x) => `<option>${x.name}</option>`).join("")}</select></div>
+          <div class="field"><label>Postal code</label><input inputmode="numeric" maxlength="6" placeholder="e.g. 520123"></div>
+          <div class="field"><label>Mobile</label><input type="tel" placeholder="+65 9123 4567"></div>
+          <button class="btn btn-ember btn-lg" type="submit">Check availability ${icon("arrow")}</button>
+          <div class="or">or</div>
+          <a class="btn btn-wa btn-lg" target="_blank" rel="noopener" href="${waLink(`Hi Ferron, I'm in ${l.name} and need help with…`)}">${WA_ICON} WhatsApp ${l.region} team</a>
+          <div class="side-meta">
+            <div>${icon("pin")} ${l.region} hub · ${l.homes}</div>
+            <div>${icon("clock")} ${COMPANY.hours}</div>
+          </div>
+        </form>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-head split">
+        <h2 class="display h2 reveal" style="font-size:clamp(34px,4vw,56px)">Also serving <span class="serif">nearby</span></h2>
+        <p class="lead reveal">Every ${l.region} neighbourhood is covered by the same local team.</p>
+      </div>
+      <div class="nearby reveal">${nearby.map((x) => `<a class="chip" href="location.html?area=${x.slug}">${icon("pin")} ${x.name}</a>`).join("")}
+        <a class="chip active" href="index.html#locations">All areas ${icon("arrow")}</a></div>
+    </div>
+  </section>`;
+
+  $("#sgMap").innerHTML = sgMapSVG();
+  $$(".pin-dot").forEach((p) => {
+    p.classList.toggle("on", p.dataset.slug === l.slug);
+    p.classList.toggle("dim", p.dataset.region !== l.region);
+  });
+
+  $("#sideForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    e.target.innerHTML = `<div class="wz-done" style="padding:20px 0"><div class="ok">${icon("check")}</div><h3>Slot held for you</h3><p>Our ${l.region} coordinator will confirm on WhatsApp.</p></div>`;
+  });
+
+  initReveal();
+</script>
+</body>
+</html>

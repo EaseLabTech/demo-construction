@@ -1,5 +1,7 @@
 # Ferron Construction SG — HTML demo
 
+**Live demo:** https://easelabtech.github.io/demo-construction/
+
 Static client demo. Open `index.html` in a browser (no build step).
 
 | Page | URL | Future Laravel route |

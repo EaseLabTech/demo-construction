@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About Us — Ferron Construction SG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<main id="page"></main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+  /* Route: about.html
+     Laravel equivalent: /about */
+  renderLayout("about");
+
+  $("#page").innerHTML = `
+  <section class="page-hero">
+    <div class="container">
+      <nav class="crumbs"><a href="index.html">Home</a><i>/</i><span>About us</span></nav>
+      <div class="page-hero-grid">
+        <div>
+          <span class="eyebrow">Since 2012</span>
+          <h1 class="display h1 page-title">Built on <span class="serif ember">honest</span><br>work.</h1>
+        </div>
+        <p class="lead">We're a Singapore home repair and renovation company with our own licensed crew: electricians, plumbers, painters and carpenters who turn up on time and quote before they start.</p>
+      </div>
+      <div class="page-hero-media"><img data-parallax src="${IMG("1600210492486-724fe5c67fb0", 2000)}" alt="A renovated Singapore home"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container story">
+      <div class="story-media reveal"><img src="${IMG("1503387762-592deb58ef4e", 1200)}" alt="Planning a renovation from drawings" loading="lazy"></div>
+      <div>
+        <span class="eyebrow reveal">Our story</span>
+        <h2 class="display h2 reveal section-title" style="margin:20px 0 28px">Started by tradesmen, <span class="serif">for homeowners.</span></h2>
+        <p class="reveal">Ferron started in 2012 with two vans and a simple frustration: too many Singapore homeowners were left waiting for contractors who never showed up, or hit with bills that doubled halfway through.</p>
+        <p class="reveal">So we did it differently. Every technician is on our payroll, not a subcontractor. Every quote is itemised and agreed before work starts. And every job comes with a written warranty.</p>
+        <p class="reveal">Twelve years and 18,000 jobs later, that's still how we work, now with crews in all five regions of Singapore.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="stats">
+        <div class="stat reveal"><b><span data-count="12">0</span><sup>+</sup></b><span>Years serving Singapore</span></div>
+        <div class="stat reveal" style="--d:.1s"><b><span data-count="18500">0</span><sup>+</sup></b><span>Jobs completed</span></div>
+        <div class="stat reveal" style="--d:.2s"><b><span data-count="64">0</span></b><span>In-house technicians</span></div>
+        <div class="stat reveal" style="--d:.3s"><b><span data-count="4.9" data-dec="1">0</span><sup>★</sup></b><span>Average from 1,745 reviews</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">What we promise</span>
+          <h2 class="display h2 reveal section-title" style="margin-top:20px">Four things you can <span class="serif ember">hold us to.</span></h2>
+        </div>
+      </div>
+      <div class="values">${VALUES.map((v, i) => `
+        <div class="value reveal" style="--d:${i * 0.08}s"><span class="pk-ico">${icon(v.icon)}</span><h3>${v.title}</h3><p>${v.text}</p></div>`).join("")}</div>
+    </div>
+  </section>
+
+  <section class="section ba-section">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">Our journey</span>
+          <h2 class="display h2 reveal section-title" style="margin-top:20px">From two vans to <span class="serif ember">five regions.</span></h2>
+        </div>
+      </div>
+      <div class="timeline">${MILESTONES.map((m) => `
+        <div class="tl-item reveal"><span class="yr">${m.year}</span><h3>${m.title}</h3><p>${m.text}</p></div>`).join("")}</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">The people</span>
+          <h2 class="display h2 reveal section-title" style="margin-top:20px">Meet the <span class="serif">leadership team.</span></h2>
+        </div>
+        <p class="lead reveal">Backed by 60+ licensed technicians, coordinators and project managers across Singapore.</p>
+      </div>
+      <div class="team">${TEAM.map((t, i) => `
+        <div class="member reveal" style="--d:${i * 0.08}s">
+          <span class="av" style="background:${AV_COLORS[i % AV_COLORS.length]}">${t.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}</span>
+          <b>${t.name}</b><span>${t.role}</span><small>${t.years} yrs experience</small>
+        </div>`).join("")}</div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">Licences &amp; accreditation</span>
+          <h2 class="display h2 reveal section-title" style="margin-top:20px">Fully licensed. <span class="serif">Fully insured.</span></h2>
+        </div>
+        <p class="lead reveal">We're happy to share licence numbers before any job.</p>
+      </div>
+      <div class="certs">${CERTS.map((c, i) => `
+        <div class="cert reveal" style="--d:${i * 0.08}s"><span class="pk-ico">${icon("award")}</span><div><b>${c.name}</b><span>${c.text}</span></div></div>`).join("")}</div>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="cta-big reveal">
+      <img src="${IMG("1504307651254-35680f356dfd", 1800)}" alt="">
+      <div class="row">
+        <div>
+          <h2 class="display h2">Let's fix it <span class="serif">together.</span></h2>
+          <p class="lead">See our work, or get a quote in 60 seconds.</p>
+        </div>
+        <div class="actions">
+          <a class="btn btn-lg" href="projects.html">${icon("arrow")} See our projects</a>
+          <a class="btn btn-wa btn-lg" href="contact.html">Get a free quote</a>
+        </div>
+      </div>
+    </div>
+  </section>`;
+
+  initReveal();
+  initCounters();
+  initParallax();
+</script>
+</body>
+</html>

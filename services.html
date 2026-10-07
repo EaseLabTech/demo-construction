@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>All Services — Ferron Construction SG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<main id="page"></main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+  /* Route: services.html[?c={category}]
+     Laravel equivalent: /services */
+  renderLayout("services");
+  const CATEGORIES = ["All", ...new Set(SERVICES.map((s) => s.category))];
+  let cat = CATEGORIES.includes(params.get("c")) ? params.get("c") : "All";
+
+  $("#page").innerHTML = `
+  <section class="page-hero">
+    <div class="container">
+      <nav class="crumbs"><a href="index.html">Home</a><i>/</i><span>Services</span></nav>
+      <div class="page-hero-grid">
+        <div>
+          <span class="eyebrow">${SERVICES.length} services · one crew</span>
+          <h1 class="display h1 page-title">Every fix,<br><span class="serif ember">one trusted team.</span></h1>
+        </div>
+        <div style="display:grid;gap:24px">
+          <p class="lead">From a 1-hour TV mounting to a 3-week kitchen makeover, every job is done by our own licensed technicians, with the price agreed upfront and the work under warranty.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:12px">
+            <a class="btn btn-ember btn-lg" href="contact.html">Get a free quote ${icon("arrow")}</a>
+            <a class="btn btn-ghost btn-lg" href="#compare">Compare prices</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:clamp(48px,6vw,80px)">
+    <div class="container">
+      <div class="filter-bar" id="catFilter">
+        ${CATEGORIES.map((c) => `<button class="chip ${c === cat ? "active" : ""}" data-c="${c}">${c}</button>`).join("")}
+        <span class="count" id="svcCount"></span>
+      </div>
+      <div id="svcList"></div>
+    </div>
+  </section>
+
+  <section class="section" id="compare" style="padding-top:0;scroll-margin-top:90px">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">At a glance</span>
+          <h2 class="display h2 reveal section-title" style="margin-top:20px">Prices, timelines <span class="serif">&amp; warranties.</span></h2>
+        </div>
+        <p class="lead reveal">Starting prices for a typical HDB flat. Condo and landed homes are quoted after a free assessment.</p>
+      </div>
+      <div class="table-wrap reveal">
+        <table class="compare">
+          <thead><tr><th>Service</th><th>Type</th><th>From</th><th>Typical duration</th><th>Warranty</th><th></th></tr></thead>
+          <tbody>${SERVICES.map((s) => `
+            <tr>
+              <td><b>${s.name}</b></td>
+              <td>${s.category}</td>
+              <td><b>S$${s.from}</b>${s.unit || ""}</td>
+              <td>${s.duration}</td>
+              <td>${s.warranty}</td>
+              <td><a href="service.html?s=${s.slug}">Details →</a></td>
+            </tr>`).join("")}</tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">How it works</span>
+          <h2 class="display h2 reveal section-title" style="margin-top:20px">Four steps. <span class="serif">Zero</span> headaches.</h2>
+        </div>
+      </div>
+      <div class="process">
+        ${[["Book online", "Tell us what's wrong via the form or WhatsApp. Photos help us quote faster."], ["We confirm", "A coordinator calls back to confirm details and lock in a slot."], ["Fixed quote", "Our technician inspects and gives a firm price before any work."], ["Job done", "Work completed, site cleaned, warranty issued."]]
+          .map(([h, p], i) => `<div class="step reveal" style="--d:${i * 0.08}s"><span class="step-n">0${i + 1}</span><div><h3>${h}</h3><p>${p}</p></div></div>`).join("")}
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="cta-big reveal">
+      <img src="${IMG("1504307651254-35680f356dfd", 1800)}" alt="">
+      <div class="row">
+        <div>
+          <h2 class="display h2">Not sure which service you need?</h2>
+          <p class="lead">Send us a photo on WhatsApp and we'll tell you, for free.</p>
+        </div>
+        <div class="actions">
+          <a class="btn btn-lg" href="tel:+${COMPANY.phoneRaw}">${icon("phone")} ${COMPANY.phone}</a>
+          <a class="btn btn-wa btn-lg" target="_blank" rel="noopener" href="${waLink("Hi Ferron, not sure which service I need. Here's a photo:")}">${WA_ICON} WhatsApp a photo</a>
+        </div>
+      </div>
+    </div>
+  </section>`;
+
+  const renderList = () => {
+    const list = SERVICES.filter((s) => cat === "All" || s.category === cat);
+    $("#svcCount").textContent = `${list.length} service${list.length === 1 ? "" : "s"}`;
+    $("#svcList").innerHTML = list.map((s, i) => `
+      <article class="svc-feature" id="${s.slug}">
+        <a class="sf-media" href="service.html?s=${s.slug}">
+          <img src="${s.img}" alt="${s.name} service" loading="lazy">
+          <span class="sf-num">${s.category}</span>
+        </a>
+        <div class="sf-body">
+          <div class="sf-head"><span class="mi-ico">${icon(s.icon)}</span><h2>${s.name}</h2></div>
+          <p>${s.summary}</p>
+          <div class="sf-facts">
+            <div><small>From</small><b>S$${s.from}${s.unit || ""}</b></div>
+            <div><small>Duration</small><b>${s.duration}</b></div>
+            <div><small>Warranty</small><b>${s.warranty}</b></div>
+          </div>
+          <div class="sf-list">${s.includes.map((x) => `<span>${x}</span>`).join("")}</div>
+          <div class="sf-actions">
+            <a class="btn btn-ember" href="contact.html?svc=${s.slug}">Get a quote ${icon("arrow")}</a>
+            <a class="btn btn-ghost" href="service.html?s=${s.slug}">Full details</a>
+          </div>
+        </div>
+      </article>`).join("");
+  };
+
+  $("#catFilter").addEventListener("click", (e) => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    cat = b.dataset.c;
+    $$("#catFilter .chip").forEach((c) => c.classList.toggle("active", c === b));
+    history.replaceState(null, "", cat === "All" ? "services.html" : `services.html?c=${cat}`);
+    renderList();
+  });
+
+  renderList();
+  initReveal();
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project — Ferron Construction SG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<main id="page"></main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+  /* Route: project.html?p={slug}
+     Laravel equivalent: /projects/{project} */
+  renderLayout("projects");
+  const p = projBySlug(params.get("p")) || PROJECTS[0];
+  const s = svcBySlug(p.service);
+  const aSlug = areaSlug(p.area);
+  const related = [...PROJECTS.filter((x) => x.slug !== p.slug && x.tag === p.tag), ...PROJECTS.filter((x) => x.slug !== p.slug && x.tag !== p.tag)].slice(0, 3);
+  const big = p.img.replace("w=900", "w=2000");
+  document.title = `${p.title} in ${p.area} — Ferron Construction SG`;
+
+  $("#page").innerHTML = `
+  <section class="page-hero">
+    <div class="container">
+      <nav class="crumbs"><a href="index.html">Home</a><i>/</i><a href="projects.html">Projects</a><i>/</i><span>${p.title}</span></nav>
+      <div class="page-hero-grid">
+        <div>
+          <span class="eyebrow">${p.tag} · ${p.area}</span>
+          <h1 class="display h1 page-title">${p.title}<br><span class="serif ember">in ${p.area}.</span></h1>
+        </div>
+        <p class="lead">${p.summary}</p>
+      </div>
+      <div class="meta-strip" style="margin-top:40px">
+        <div><small>Property</small><b>${p.property}</b></div>
+        <div><small>Location</small><b><a href="location.html?area=${aSlug}">${p.area} ↗</a></b></div>
+        <div><small>Duration</small><b>${p.duration}</b></div>
+        <div><small>Budget</small><b>${p.budget}</b></div>
+        <div><small>Completed</small><b>${p.year}</b></div>
+      </div>
+      <div class="page-hero-media"><img data-parallax src="${big}" alt="${p.title} in ${p.area}"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container detail-grid">
+      <div>
+        <span class="eyebrow reveal">What we did</span>
+        <h2 class="display h2 reveal section-title" style="margin-top:20px">The full <span class="serif">scope.</span></h2>
+        <div class="include-grid">${p.scope.map((x, n) => `<div class="include reveal" style="--d:${n * 0.05}s">${icon("check")}${x}</div>`).join("")}</div>
+
+        <div style="margin-top:72px">
+          <span class="eyebrow reveal">Before &amp; after</span>
+          <h2 class="display h2 reveal section-title" style="margin:20px 0 28px">Drag to <span class="serif ember">compare.</span></h2>
+          <div class="ba ba-light reveal" id="ba">
+            <img src="${big}" alt="After">
+            <img class="before" src="${big}" alt="Before">
+            <span class="ba-tag l">Before</span><span class="ba-tag r">After</span>
+            <div class="ba-handle"></div>
+          </div>
+        </div>
+
+        <div style="margin-top:72px">
+          <span class="eyebrow reveal">On site</span>
+          <div class="gallery">${p.gallery.map((id) => `<img class="reveal" src="${IMG(id, 1000)}" alt="${p.title} — detail" loading="lazy">`).join("")}</div>
+        </div>
+
+        <figure class="pull-quote reveal" style="margin-top:72px">
+          <blockquote>“${p.review.text}”</blockquote>
+          <figcaption><b style="color:#fff">${p.review.name}</b> · ${p.area} <span class="stars">${icon("star").repeat(5)}</span></figcaption>
+        </figure>
+      </div>
+
+      <aside>
+        <form class="side-card" id="sideForm">
+          <h3>Want a result like this?</h3>
+          <p>Similar ${s.name.toLowerCase()} jobs start from <b style="color:#fff">S$${s.from}${s.unit || ""}</b>.</p>
+          <div class="field"><label>Service</label><select>${SERVICES.map((x) => `<option ${x.slug === s.slug ? "selected" : ""}>${x.name}</option>`).join("")}</select></div>
+          <div class="field"><label>Area</label><select>${LOCATIONS.map((l) => `<option ${l.slug === aSlug ? "selected" : ""}>${l.name}</option>`).join("")}</select></div>
+          <div class="field"><label>Mobile</label><input type="tel" placeholder="+65 9123 4567"></div>
+          <button class="btn btn-ember btn-lg" type="submit">Request similar quote ${icon("arrow")}</button>
+          <div class="or">or</div>
+          <a class="btn btn-wa btn-lg" target="_blank" rel="noopener" href="${waLink(`Hi Ferron, I saw your "${p.title}" project in ${p.area}. I'd like something similar.`)}">${WA_ICON} WhatsApp us</a>
+          <div class="side-meta">
+            <div>${icon(s.icon)} <a href="service.html?s=${s.slug}">${s.name} service details →</a></div>
+            <div>${icon("shield")} ${s.warranty} workmanship warranty</div>
+          </div>
+        </form>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-head split">
+        <h2 class="display h2 reveal section-title">More <span class="serif">projects</span></h2>
+        <p class="lead reveal"><a href="projects.html" style="color:var(--ember);font-weight:600">View all ${PROJECTS.length} projects →</a></p>
+      </div>
+      <div class="projects flat">${related.map(projectCard).join("")}</div>
+    </div>
+  </section>`;
+
+  $("#sideForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    e.target.innerHTML = `<div class="wz-done" style="padding:20px 0"><div class="ok">${icon("check")}</div><h3>Request received</h3><p>We'll WhatsApp your quote shortly.</p></div>`;
+  });
+
+  initBA($("#ba"));
+  initReveal();
+  initParallax();
+</script>
+</body>
+</html>

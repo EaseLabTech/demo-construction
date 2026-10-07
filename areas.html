@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Service Areas Across Singapore — Ferron Construction SG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<main id="page"></main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+  /* Route: areas.html[#{region}]
+     Laravel equivalent: /areas */
+  renderLayout("locations");
+  const inRegion = (r) => LOCATIONS.filter((l) => l.region === r);
+  const etaRange = (r) => { const e = inRegion(r).map((l) => l.eta); return `${Math.min(...e)}–${Math.max(...e)} min`; };
+
+  $("#page").innerHTML = `
+  <section class="page-hero">
+    <div class="container">
+      <nav class="crumbs"><a href="index.html">Home</a><i>/</i><span>Areas</span></nav>
+      <div class="page-hero-grid">
+        <div>
+          <span class="eyebrow">${LOCATIONS.length} neighbourhoods · ${REGIONS.length} regions</span>
+          <h1 class="display h1 page-title">Wherever you are,<br><span class="serif ember">we're nearby.</span></h1>
+        </div>
+        <div style="display:grid;gap:24px">
+          <p class="lead">Regional crews stationed across the island mean faster arrivals and local know-how, from HDB estates in Punggol to landed homes in Bukit Timah.</p>
+          <div class="loc-search">
+            ${icon("search")}
+            <input id="q" type="search" placeholder="Search your neighbourhood…" autocomplete="off" aria-label="Search area">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:clamp(40px,5vw,72px)">
+    <div class="container">
+      <div class="sg-map reveal"><div id="sgMap"></div>
+        <div class="map-legend"><span><i></i> Service hub</span><span><i class="e"></i> Matches your search</span><span>Tap a pin to open the area</span></div></div>
+      <div class="filter-bar" id="regionJump" style="margin:28px 0 0">
+        ${REGIONS.map((r) => `<a class="chip" href="#${r.toLowerCase()}">${r} <span class="muted">· ${inRegion(r).length}</span></a>`).join("")}
+        <span class="count" id="areaCount"></span>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-bottom:clamp(40px,6vw,80px)">
+    <div class="container" id="regions"></div>
+  </section>
+
+  <section class="container">
+    <div class="cta-big reveal">
+      <img src="${IMG("1504307651254-35680f356dfd", 1800)}" alt="">
+      <div class="row">
+        <div>
+          <h2 class="display h2">Don't see your <span class="serif">area?</span></h2>
+          <p class="lead">We cover all of mainland Singapore. Message us and we'll confirm your slot.</p>
+        </div>
+        <div class="actions">
+          <a class="btn btn-lg" href="contact.html">${icon("arrow")} Get a quote</a>
+          <a class="btn btn-wa btn-lg" target="_blank" rel="noopener" href="${waLink("Hi Ferron, do you cover my area?")}">${WA_ICON} Ask on WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>`;
+
+  $("#sgMap").innerHTML = sgMapSVG();
+
+  const render = () => {
+    const q = $("#q").value.trim().toLowerCase();
+    const match = (l) => !q || l.name.toLowerCase().includes(q);
+    const shown = LOCATIONS.filter(match);
+    $("#areaCount").textContent = q ? `${shown.length} match${shown.length === 1 ? "" : "es"}` : "";
+    $$(".pin-dot").forEach((p) => {
+      const hit = shown.some((l) => l.slug === p.dataset.slug);
+      p.classList.toggle("dim", !hit);
+      p.classList.toggle("on", !!q && hit);
+    });
+    $("#regions").innerHTML = REGIONS.filter((r) => inRegion(r).some(match)).map((r) => `
+      <div class="region-block" id="${r.toLowerCase()}">
+        <div class="region-head"><h2>${r}</h2><span>${icon("clock")} Avg. arrival ${etaRange(r)} · ${inRegion(r).length} areas</span></div>
+        <div class="area-cards">${inRegion(r).filter(match).map((l) => `
+          <a class="area-card" href="location.html?area=${l.slug}">
+            <div class="ac-top"><b>${l.name}</b>${icon("arrowUR")}</div>
+            <small>${l.homes}</small>
+            <span class="ac-eta">${icon("clock")} ~${l.eta} min arrival</span>
+          </a>`).join("")}</div>
+      </div>`).join("") || `<div class="empty" style="margin-top:32px">No area called “${$("#q").value}” in our list, but we likely still cover it. <a href="contact.html" style="color:var(--ember);font-weight:600">Ask us →</a></div>`;
+  };
+
+  $("#q").addEventListener("input", render);
+  render();
+  initReveal();
+</script>
+</body>
+</html>

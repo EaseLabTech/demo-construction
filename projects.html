@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects — Ferron Construction SG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<main id="page"></main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+  /* Route: projects.html[?type={tag}&region={region}]
+     Laravel equivalent: /projects */
+  renderLayout("projects");
+  const TAGS = ["All", ...new Set(PROJECTS.map((p) => p.tag))];
+  const regionOf = (p) => LOCATIONS.find((l) => l.name === p.area)?.region;
+  let tag = TAGS.includes(params.get("type")) ? params.get("type") : "All";
+  let region = REGIONS.includes(params.get("region")) ? params.get("region") : "All";
+
+  $("#page").innerHTML = `
+  <section class="page-hero">
+    <div class="container">
+      <nav class="crumbs"><a href="index.html">Home</a><i>/</i><span>Projects</span></nav>
+      <div class="page-hero-grid">
+        <div>
+          <span class="eyebrow">Recent work</span>
+          <h1 class="display h1 page-title">Homes we've<br><span class="serif ember">brought back to life.</span></h1>
+        </div>
+        <p class="lead">Real jobs from across the island, from 4-hour mounting jobs to 9-week extensions. Open any project to see the scope, timeline, budget and what the client said.</p>
+      </div>
+      <div class="stats" style="margin-top:48px">
+        <div class="stat"><b><span data-count="18500">0</span><sup>+</sup></b><span>Jobs completed</span></div>
+        <div class="stat"><b><span data-count="${PROJECTS.length}">0</span></b><span>Featured case studies</span></div>
+        <div class="stat"><b><span data-count="4.9" data-dec="1">0</span><sup>★</sup></b><span>Average client rating</span></div>
+        <div class="stat"><b><span data-count="96">0</span><sup>%</sup></b><span>Finished on schedule</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:clamp(48px,6vw,80px)">
+    <div class="container">
+      <div class="filter-bar" id="tagFilter">${TAGS.map((t) => `<button class="chip ${t === tag ? "active" : ""}" data-v="${t}">${t}</button>`).join("")}</div>
+      <div class="filter-bar" id="regionFilter">
+        ${["All", ...REGIONS].map((r) => `<button class="chip ${r === region ? "active" : ""}" data-v="${r}">${r === "All" ? "All regions" : r}</button>`).join("")}
+        <span class="count" id="pjCount"></span>
+      </div>
+      <div class="projects flat" id="pjGrid"></div>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="cta-big reveal">
+      <img src="${IMG("1504307651254-35680f356dfd", 1800)}" alt="">
+      <div class="row">
+        <div>
+          <h2 class="display h2">Your home could be <span class="serif">next.</span></h2>
+          <p class="lead">Tell us about your project and get an itemised quote within 15 minutes.</p>
+        </div>
+        <div class="actions">
+          <a class="btn btn-lg" href="contact.html">${icon("arrow")} Start my quote</a>
+          <a class="btn btn-wa btn-lg" target="_blank" rel="noopener" href="${waLink()}">${WA_ICON} WhatsApp us</a>
+        </div>
+      </div>
+    </div>
+  </section>`;
+
+  const render = () => {
+    const list = PROJECTS.filter((p) => (tag === "All" || p.tag === tag) && (region === "All" || regionOf(p) === region));
+    $("#pjCount").textContent = `${list.length} project${list.length === 1 ? "" : "s"}`;
+    $("#pjGrid").innerHTML = list.length
+      ? list.map(projectCard).join("")
+      : `<div class="empty" style="grid-column:1/-1">No ${tag === "All" ? "" : tag.toLowerCase() + " "}projects in the ${region} region yet. <a href="contact.html" style="color:var(--ember);font-weight:600">Be the first →</a></div>`;
+    // newly rendered cards: show immediately rather than waiting for scroll
+    requestAnimationFrame(() => $$("#pjGrid .reveal").forEach((el) => el.classList.add("in")));
+    const q = new URLSearchParams();
+    if (tag !== "All") q.set("type", tag);
+    if (region !== "All") q.set("region", region);
+    history.replaceState(null, "", `projects.html${q.size ? "?" + q : ""}`);
+  };
+
+  const bindFilter = (id, set) => $(id).addEventListener("click", (e) => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    set(b.dataset.v);
+    $$(`${id} .chip`).forEach((c) => c.classList.toggle("active", c === b));
+    render();
+  });
+  bindFilter("#tagFilter", (v) => (tag = v));
+  bindFilter("#regionFilter", (v) => (region = v));
+
+  render();
+  initReveal();
+  initCounters();
+</script>
+</body>
+</html>

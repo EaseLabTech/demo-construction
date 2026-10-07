@@ -26,7 +26,7 @@
   $("#page").innerHTML = `
   <section class="page-hero">
     <div class="container">
-      <nav class="crumbs"><a href="index.html">Home</a><i>/</i><a href="index.html#locations">Areas</a><i>/</i><span>${l.region}</span><i>/</i><span>${l.name}</span></nav>
+      <nav class="crumbs"><a href="index.html">Home</a><i>/</i><a href="areas.html">Areas</a><i>/</i><a href="areas.html#${l.region.toLowerCase()}">${l.region}</a><i>/</i><span>${l.name}</span></nav>
       <div class="page-hero-grid">
         <div>
           <span class="eyebrow">${l.region} region</span>
@@ -93,7 +93,7 @@
         <p class="lead reveal">Every ${l.region} neighbourhood is covered by the same local team.</p>
       </div>
       <div class="nearby reveal">${nearby.map((x) => `<a class="chip" href="location.html?area=${x.slug}">${icon("pin")} ${x.name}</a>`).join("")}
-        <a class="chip active" href="index.html#locations">All areas ${icon("arrow")}</a></div>
+        <a class="chip active" href="areas.html">All areas ${icon("arrow")}</a></div>
     </div>
   </section>`;
 

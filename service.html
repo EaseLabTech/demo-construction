@@ -26,7 +26,7 @@
   $("#page").innerHTML = `
   <section class="page-hero">
     <div class="container">
-      <nav class="crumbs"><a href="index.html">Home</a><i>/</i><a href="index.html#services">Services</a><i>/</i>
+      <nav class="crumbs"><a href="index.html">Home</a><i>/</i><a href="services.html">Services</a><i>/</i>
         ${area ? `<a href="service.html?s=${s.slug}">${s.name}</a><i>/</i><span>${area.name}</span>` : `<span>${s.name}</span>`}</nav>
       <div class="page-hero-grid">
         <div>
@@ -37,7 +37,7 @@
           <p class="lead">${s.summary}</p>
           <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
             <div class="price-pill"><small>From</small><b>S$${s.from}</b><small>${s.unit || "/job"}</small></div>
-            <a class="btn btn-ember btn-lg" href="index.html?svc=${s.slug}#quote">Book now ${icon("arrow")}</a>
+            <a class="btn btn-ember btn-lg" href="contact.html?svc=${s.slug}${area ? `&area=${area.slug}` : ""}">Book now ${icon("arrow")}</a>
           </div>
         </div>
       </div>

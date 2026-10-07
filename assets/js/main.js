@@ -44,25 +44,25 @@ function renderLayout(active = "") {
       <ul class="menu">
         <li><a href="index.html" class="${active === "home" ? "active" : ""}">Home</a></li>
         <li class="has-mega">
-          <a href="index.html#services" class="${active === "services" ? "active" : ""}">Services
+          <a href="services.html" class="${active === "services" ? "active" : ""}">Services
             <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m2 3.5 3 3 3-3"/></svg></a>
           <div class="mega">
             <div class="mega-grid">${megaItems}</div>
-            <a class="mega-feature" href="index.html#quote">
+            <a class="mega-feature" href="contact.html">
               <img src="${IMG("1541888946425-d81bb19240f5", 600)}" alt="">
               <span class="eyebrow" style="color:#fff">24/7 Emergency</span>
               <b style="margin-top:10px">Burst pipe? Power trip?<br>We're 30 min away.</b>
             </a>
           </div>
         </li>
-        <li><a href="index.html#locations" class="${active === "locations" ? "active" : ""}">Areas</a></li>
-        <li><a href="index.html#projects">Projects</a></li>
-        <li><a href="index.html#reviews">Reviews</a></li>
-        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="areas.html" class="${active === "locations" ? "active" : ""}">Areas</a></li>
+        <li><a href="projects.html" class="${active === "projects" ? "active" : ""}">Projects</a></li>
+        <li><a href="about.html" class="${active === "about" ? "active" : ""}">About</a></li>
+        <li><a href="contact.html" class="${active === "contact" ? "active" : ""}">Contact</a></li>
       </ul>
       <div class="nav-cta">
         <a class="btn btn-ghost" href="tel:+${COMPANY.phoneRaw}">${icon("phone")} Call</a>
-        <a class="btn btn-ember" href="index.html#quote">Free quote ${icon("arrow")}</a>
+        <a class="btn btn-ember" href="contact.html">Free quote ${icon("arrow")}</a>
         <button class="burger" id="burger" aria-label="Open menu">${icon("menu")}</button>
       </div>
     </div>
@@ -74,10 +74,11 @@ function renderLayout(active = "") {
     </div>
     <nav>
       <a href="index.html">Home ${icon("arrowUR")}</a>
-      <a href="index.html#services">Services ${icon("arrowUR")}</a>
-      <a href="index.html#locations">Service areas ${icon("arrowUR")}</a>
-      <a href="index.html#projects">Projects ${icon("arrowUR")}</a>
-      <a href="index.html#quote">Get a quote ${icon("arrowUR")}</a>
+      <a href="services.html">Services ${icon("arrowUR")}</a>
+      <a href="areas.html">Service areas ${icon("arrowUR")}</a>
+      <a href="projects.html">Projects ${icon("arrowUR")}</a>
+      <a href="about.html">About us ${icon("arrowUR")}</a>
+      <a href="contact.html">Get a quote ${icon("arrowUR")}</a>
     </nav>
     <div class="drawer-services">${SERVICES.map((s) => `<a class="chip" href="service.html?s=${s.slug}">${s.name}</a>`).join("")}</div>
     <div class="drawer-foot">
@@ -108,6 +109,18 @@ function renderLayout(active = "") {
           <ul>${LOCATIONS.slice(0, 8).map((l) => `<li><a href="location.html?area=${l.slug}">${l.name}</a></li>`).join("")}</ul>
         </div>
         <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="about.html">About us</a></li>
+            <li><a href="services.html">All services</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="areas.html">Service areas</a></li>
+            <li><a href="index.html#reviews">Reviews</a></li>
+            <li><a href="index.html#faq">FAQ</a></li>
+            <li><a href="contact.html">Contact &amp; quote</a></li>
+          </ul>
+        </div>
+        <div>
           <h4>Contact</h4>
           <ul>
             <li><a href="tel:+${COMPANY.phoneRaw}">${COMPANY.phone}</a></li>
@@ -131,7 +144,7 @@ function renderLayout(active = "") {
   <div class="mbar">
     <a href="tel:+${COMPANY.phoneRaw}">${icon("phone")} Call</a>
     <a class="wa" href="${waLink()}" target="_blank" rel="noopener">${WA_ICON} Chat</a>
-    <a class="q" href="index.html#quote">Free quote</a>
+    <a class="q" href="contact.html">Free quote</a>
   </div>`;
 
   document.body.insertAdjacentHTML("afterbegin", header);
@@ -214,6 +227,135 @@ const reviewCard = (r, i) => `
       <span class="svc-badge">${r.service}</span>
     </div>
   </article>`;
+
+const projBySlug = (s) => PROJECTS.find((x) => x.slug === s);
+const areaSlug = (name) => LOCATIONS.find((l) => l.name === name)?.slug || "";
+
+const projectCard = (p, i = 0) => `
+  <a class="pj reveal" style="--d:${(i % 3) * 0.1}s" href="project.html?p=${p.slug}">
+    <img src="${p.img}" alt="${p.title}" loading="lazy">
+    <span class="pj-tag">${p.tag}</span>
+    <div class="pj-info"><div><b>${p.title}</b><span>${icon("pin")} ${p.area}</span></div>${icon("arrowUR")}</div>
+  </a>`;
+
+/* Before / after slider: <div class="ba"> with two imgs, tags and .ba-handle */
+function initBA(ba) {
+  if (!ba) return;
+  let drag = false;
+  const set = (x) => {
+    const r = ba.getBoundingClientRect();
+    ba.style.setProperty("--pos", `${Math.max(0, Math.min(100, ((x - r.left) / r.width) * 100))}%`);
+  };
+  ba.addEventListener("pointerdown", (e) => { drag = true; ba.setPointerCapture(e.pointerId); set(e.clientX); });
+  ba.addEventListener("pointermove", (e) => drag && set(e.clientX));
+  ba.addEventListener("pointerup", () => (drag = false));
+  // gentle intro sweep when it scrolls into view
+  new IntersectionObserver(([e], io) => {
+    if (!e.isIntersecting) return;
+    io.disconnect();
+    let t0;
+    const sweep = (t) => {
+      t0 ??= t;
+      const p = Math.min((t - t0) / 1600, 1);
+      if (!drag) ba.style.setProperty("--pos", `${50 + Math.sin(p * Math.PI * 2) * 22}%`);
+      if (p < 1) requestAnimationFrame(sweep);
+    };
+    requestAnimationFrame(sweep);
+  }, { threshold: 0.6 }).observe(ba);
+}
+
+/* Quote wizard — renders into an empty <form class="wizard">.
+   Deep-link ?svc={slug} preselects a service. */
+function mountWizard(form) {
+  form.innerHTML = `
+    <div class="wz-progress"><i class="done"></i><i></i><i></i></div>
+
+    <div class="wz-step on" data-step="1">
+      <h3>What do you need help with?</h3>
+      <p>Pick the closest match — you can add details later.</p>
+      <div class="opt-grid c4">${SERVICES.map((s, i) => `
+        <label class="opt"><input type="radio" name="svc" value="${s.slug}" ${i === 0 ? "checked" : ""}>
+        <span>${icon(s.icon)}${s.name}<small>${priceLabel(s)}</small></span></label>`).join("")}</div>
+    </div>
+
+    <div class="wz-step" data-step="2">
+      <h3>Tell us about your place</h3>
+      <p>This helps us send the right crew and estimate accurately.</p>
+      <div class="opt-grid" style="margin-bottom:16px">
+        <label class="opt"><input type="radio" name="prop" value="HDB flat" data-m="1" checked><span>HDB flat<small>3 to 5-room, executive</small></span></label>
+        <label class="opt"><input type="radio" name="prop" value="Condo / EC" data-m="1.15"><span>Condo / EC<small>MCST approvals handled</small></span></label>
+        <label class="opt"><input type="radio" name="prop" value="Landed" data-m="1.35"><span>Landed<small>Terrace, semi-D, bungalow</small></span></label>
+        <label class="opt"><input type="radio" name="prop" value="Commercial" data-m="1.5"><span>Commercial<small>Office, retail, F&amp;B</small></span></label>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for="wzArea">Area</label><select id="wzArea">${LOCATIONS.map((l) => `<option value="${l.slug}">${l.name}</option>`).join("")}</select></div>
+        <div class="field"><label for="wzWhen">When?</label>
+          <select id="wzWhen"><option>Emergency (ASAP)</option><option selected>Within this week</option><option>Next 2–4 weeks</option><option>Just planning</option></select>
+        </div>
+      </div>
+      <div class="est"><span>Estimated starting price</span><b id="wzEst">—</b></div>
+    </div>
+
+    <div class="wz-step" data-step="3">
+      <h3>Where should we send your quote?</h3>
+      <p>We'll reply on WhatsApp. No spam, ever.</p>
+      <div class="field-row">
+        <div class="field"><label for="wzName">Name</label><input id="wzName" required placeholder="Jane Tan"></div>
+        <div class="field"><label for="wzPhone">Mobile</label><input id="wzPhone" required type="tel" placeholder="+65 9123 4567"></div>
+      </div>
+      <div class="field"><label for="wzNote">Describe the job (optional)</label><textarea id="wzNote" placeholder="e.g. Kitchen sink leaking under the cabinet since yesterday"></textarea></div>
+    </div>
+
+    <div class="wz-step" data-step="4">
+      <div class="wz-done">
+        <div class="ok">${icon("check")}</div>
+        <h3>You're all set, <span id="doneName">friend</span>!</h3>
+        <p class="muted" style="margin:8px auto 24px;max-width:40ch">A coordinator will WhatsApp your itemised quote within 15 minutes. Want it faster? Chat with us now.</p>
+        <a class="btn btn-wa btn-lg" id="doneWa" target="_blank" rel="noopener">${WA_ICON} Continue on WhatsApp</a>
+      </div>
+    </div>
+
+    <div class="wz-foot" id="wzFoot">
+      <button type="button" class="wz-back" id="wzBack" hidden>← Back</button>
+      <button type="button" class="btn btn-ember btn-lg" id="wzNext">Continue</button>
+    </div>`;
+
+  let cur = 1;
+  const estimate = () => {
+    const s = svcBySlug(form.svc.value);
+    const m = +form.querySelector("[name=prop]:checked").dataset.m;
+    const urgent = $("#wzWhen").selectedIndex === 0 ? 1.2 : 1;
+    $("#wzEst").textContent = `S$${Math.round(s.from * m * urgent)}${s.unit || ""}+`;
+  };
+  form.addEventListener("change", estimate);
+
+  const show = (n) => {
+    cur = n;
+    $$(".wz-step", form).forEach((s) => s.classList.toggle("on", +s.dataset.step === n));
+    $$(".wz-progress i", form).forEach((b, i) => b.classList.toggle("done", i < n));
+    $("#wzBack").hidden = n === 1;
+    $("#wzNext").textContent = n === 3 ? "Send my quote" : "Continue";
+    $("#wzFoot").style.display = n === 4 ? "none" : "";
+    if (n === 2) estimate();
+  };
+
+  $("#wzNext").onclick = () => {
+    if (cur === 3) {
+      const name = $("#wzName"), phone = $("#wzPhone");
+      [name, phone].forEach((f) => (f.style.boxShadow = f.value.trim() ? "" : "inset 0 0 0 2px #e2470f"));
+      if (!name.value.trim() || !phone.value.trim()) return;
+      const s = svcBySlug(form.svc.value), l = locBySlug($("#wzArea").value);
+      $("#doneName").textContent = name.value.trim().split(" ")[0];
+      $("#doneWa").href = waLink(`Hi Ferron, I'm ${name.value.trim()}. I need ${s.name} at my ${form.querySelector("[name=prop]:checked").value} in ${l.name} (${$("#wzWhen").value}). ${$("#wzNote").value}`);
+    }
+    show(cur + 1);
+  };
+  $("#wzBack").onclick = () => show(cur - 1);
+
+  const pre = params.get("svc"), preArea = params.get("area");
+  if (pre && form.querySelector(`[value="${pre}"]`)) form.querySelector(`[value="${pre}"]`).checked = true;
+  if (preArea && locBySlug(preArea)) $("#wzArea").value = preArea;
+}
 
 /* Singapore outline (lon, lat) → simplified for the area map */
 const SG_OUTLINE = [[103.62,1.30],[103.64,1.335],[103.67,1.37],[103.70,1.425],[103.735,1.44],[103.77,1.452],[103.80,1.448],[103.83,1.468],[103.86,1.45],[103.875,1.425],[103.91,1.425],[103.95,1.395],[103.985,1.395],[104.03,1.39],[104.045,1.36],[104.02,1.33],[103.98,1.315],[103.935,1.298],[103.89,1.29],[103.86,1.268],[103.83,1.262],[103.80,1.272],[103.76,1.282],[103.72,1.298],[103.68,1.285],[103.64,1.282]];

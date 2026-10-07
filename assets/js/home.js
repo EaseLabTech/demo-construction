@@ -61,38 +61,10 @@ renderAreas();
 setArea("tampines");
 
 /* ---------- Before / after ---------- */
-(() => {
-  const ba = $("#ba");
-  let drag = false;
-  const set = (x) => {
-    const r = ba.getBoundingClientRect();
-    ba.style.setProperty("--pos", `${Math.max(0, Math.min(100, ((x - r.left) / r.width) * 100))}%`);
-  };
-  ba.addEventListener("pointerdown", (e) => { drag = true; ba.setPointerCapture(e.pointerId); set(e.clientX); });
-  ba.addEventListener("pointermove", (e) => drag && set(e.clientX));
-  ba.addEventListener("pointerup", () => (drag = false));
-  // gentle intro sweep when it scrolls into view
-  new IntersectionObserver(([e], io) => {
-    if (!e.isIntersecting) return;
-    io.disconnect();
-    let t0;
-    const sweep = (t) => {
-      t0 ??= t;
-      const p = Math.min((t - t0) / 1600, 1);
-      if (!drag) ba.style.setProperty("--pos", `${50 + Math.sin(p * Math.PI * 2) * 22}%`);
-      if (p < 1) requestAnimationFrame(sweep);
-    };
-    requestAnimationFrame(sweep);
-  }, { threshold: 0.6 }).observe(ba);
-})();
+initBA($("#ba"));
 
 /* ---------- Projects ---------- */
-$("#projectGrid").innerHTML = PROJECTS.map((p, i) => `
-  <a class="pj reveal" style="--d:${(i % 3) * 0.1}s" href="location.html?area=${LOCATIONS.find((l) => l.name === p.area)?.slug || ""}">
-    <img src="${p.img}" alt="${p.title}" loading="lazy">
-    <span class="pj-tag">${p.tag}</span>
-    <div class="pj-info"><div><b>${p.title}</b><span>${icon("pin")} ${p.area}</span></div>${icon("arrowUR")}</div>
-  </a>`).join("");
+$("#projectGrid").innerHTML = PROJECTS.slice(0, 6).map(projectCard).join("");
 
 /* ---------- Reviews ---------- */
 $("#ratingStars").innerHTML = icon("star").repeat(5);
@@ -105,51 +77,7 @@ $("#carPrev").onclick = () => car.scrollBy({ left: -step(), behavior: "smooth" }
 $("#carNext").onclick = () => car.scrollBy({ left: step(), behavior: "smooth" });
 
 /* ---------- Quote wizard ---------- */
-(() => {
-  const form = $("#wizard");
-  let cur = 1;
-  $("#wzServices").innerHTML = SERVICES.map((s, i) => `
-    <label class="opt"><input type="radio" name="svc" value="${s.slug}" ${i === 0 ? "checked" : ""}>
-    <span>${icon(s.icon)}${s.name}<small>${priceLabel(s)}</small></span></label>`).join("");
-  $("#wzArea").innerHTML = LOCATIONS.map((l) => `<option value="${l.slug}">${l.name}</option>`).join("");
-  $("#okIco").innerHTML = icon("check");
-
-  const estimate = () => {
-    const s = svcBySlug(form.svc.value);
-    const m = +form.querySelector("[name=prop]:checked").dataset.m;
-    const urgent = $("#wzWhen").selectedIndex === 0 ? 1.2 : 1;
-    $("#wzEst").textContent = `S$${Math.round(s.from * m * urgent)}${s.unit || ""}+`;
-  };
-  form.addEventListener("change", estimate);
-
-  const show = (n) => {
-    cur = n;
-    $$(".wz-step", form).forEach((s) => s.classList.toggle("on", +s.dataset.step === n));
-    $$(".wz-progress i", form).forEach((b, i) => b.classList.toggle("done", i < n));
-    $("#wzBack").hidden = n === 1;
-    $("#wzNext").textContent = n === 3 ? "Send my quote" : "Continue";
-    $("#wzFoot").style.display = n === 4 ? "none" : "";
-    if (n === 2) estimate();
-  };
-
-  $("#wzNext").onclick = () => {
-    if (cur === 3) {
-      const name = $("#wzName"), phone = $("#wzPhone");
-      [name, phone].forEach((f) => (f.style.boxShadow = f.value.trim() ? "" : "inset 0 0 0 2px #e2470f"));
-      if (!name.value.trim() || !phone.value.trim()) return;
-      const s = svcBySlug(form.svc.value), l = locBySlug($("#wzArea").value);
-      $("#doneName").textContent = name.value.trim().split(" ")[0];
-      $("#doneWa").href = waLink(`Hi Ferron, I'm ${name.value.trim()}. I need ${s.name} at my ${form.querySelector("[name=prop]:checked").value} in ${l.name} (${$("#wzWhen").value}). ${$("#wzNote").value}`);
-      $("#doneWa").insertAdjacentHTML("afterbegin", WA_ICON + " ");
-    }
-    show(cur + 1);
-  };
-  $("#wzBack").onclick = () => show(cur - 1);
-
-  // deep-link: index.html?svc=plumbing#quote preselects a service
-  const pre = params.get("svc");
-  if (pre && form.querySelector(`[value="${pre}"]`)) form.querySelector(`[value="${pre}"]`).checked = true;
-})();
+mountWizard($("#wizard"));
 
 /* ---------- FAQ ---------- */
 $("#faqList").innerHTML = FAQS.map((f, i) => `

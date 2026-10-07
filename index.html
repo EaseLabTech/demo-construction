@@ -86,6 +86,7 @@
         <p class="lead reveal">Tap any service for scope, pricing and instant booking. Every job is quoted upfront and backed by our workmanship guarantee.</p>
       </div>
       <div class="bento" id="bento"></div>
+      <div class="more-link reveal"><a class="btn btn-ghost btn-lg" href="services.html">Compare all services <i data-i="arrow"></i></a></div>
     </div>
   </section>
 
@@ -112,6 +113,7 @@
             <b id="lpName">Pick an area</b>
             <p id="lpMeta">Hover the map or choose from the list to see local response times.</p>
             <a class="btn btn-ember" id="lpLink" href="#locations">View area page</a>
+            <a class="lp-all" href="areas.html">Browse all areas →</a>
           </div>
         </div>
         <div class="sg-map reveal" style="--d:.15s">
@@ -177,6 +179,7 @@
         <p class="lead reveal">A snapshot of recent projects from across the island. Every photo is from a real Ferron job site.</p>
       </div>
       <div class="projects" id="projectGrid"></div>
+      <div class="more-link reveal"><a class="btn btn-ghost btn-lg" href="projects.html">See all projects <i data-i="arrow"></i></a></div>
     </div>
   </section>
 
@@ -212,57 +215,7 @@
           </div>
         </div>
 
-        <form class="wizard reveal" id="wizard" novalidate>
-          <div class="wz-progress"><i class="done"></i><i></i><i></i></div>
-
-          <div class="wz-step on" data-step="1">
-            <h3>What do you need help with?</h3>
-            <p>Pick the closest match — you can add details later.</p>
-            <div class="opt-grid c4" id="wzServices"></div>
-          </div>
-
-          <div class="wz-step" data-step="2">
-            <h3>Tell us about your place</h3>
-            <p>This helps us send the right crew and estimate accurately.</p>
-            <div class="opt-grid" style="margin-bottom:16px">
-              <label class="opt"><input type="radio" name="prop" value="HDB flat" data-m="1" checked><span>HDB flat<small>3 to 5-room, executive</small></span></label>
-              <label class="opt"><input type="radio" name="prop" value="Condo / EC" data-m="1.15"><span>Condo / EC<small>MCST approvals handled</small></span></label>
-              <label class="opt"><input type="radio" name="prop" value="Landed" data-m="1.35"><span>Landed<small>Terrace, semi-D, bungalow</small></span></label>
-              <label class="opt"><input type="radio" name="prop" value="Commercial" data-m="1.5"><span>Commercial<small>Office, retail, F&amp;B</small></span></label>
-            </div>
-            <div class="field-row">
-              <div class="field"><label for="wzArea">Area</label><select id="wzArea"></select></div>
-              <div class="field"><label for="wzWhen">When?</label>
-                <select id="wzWhen"><option>Emergency (ASAP)</option><option selected>Within this week</option><option>Next 2–4 weeks</option><option>Just planning</option></select>
-              </div>
-            </div>
-            <div class="est"><span>Estimated starting price</span><b id="wzEst">—</b></div>
-          </div>
-
-          <div class="wz-step" data-step="3">
-            <h3>Where should we send your quote?</h3>
-            <p>We'll reply on WhatsApp. No spam, ever.</p>
-            <div class="field-row">
-              <div class="field"><label for="wzName">Name</label><input id="wzName" required placeholder="Jane Tan"></div>
-              <div class="field"><label for="wzPhone">Mobile</label><input id="wzPhone" required type="tel" placeholder="+65 9123 4567"></div>
-            </div>
-            <div class="field"><label for="wzNote">Describe the job (optional)</label><textarea id="wzNote" placeholder="e.g. Kitchen sink leaking under the cabinet since yesterday"></textarea></div>
-          </div>
-
-          <div class="wz-step" data-step="4">
-            <div class="wz-done">
-              <div class="ok" id="okIco"></div>
-              <h3>You're all set, <span id="doneName">friend</span>!</h3>
-              <p class="muted" style="margin:8px auto 24px;max-width:40ch">A coordinator will WhatsApp your itemised quote within 15 minutes. Want it faster? Chat with us now.</p>
-              <a class="btn btn-wa btn-lg" id="doneWa" target="_blank" rel="noopener">Continue on WhatsApp</a>
-            </div>
-          </div>
-
-          <div class="wz-foot" id="wzFoot">
-            <button type="button" class="wz-back" id="wzBack" hidden>← Back</button>
-            <button type="button" class="btn btn-ember btn-lg" id="wzNext">Continue</button>
-          </div>
-        </form>
+        <form class="wizard reveal" id="wizard" novalidate></form>
       </div>
     </div>
   </section>

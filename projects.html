@@ -15,13 +15,19 @@
 <script src="assets/js/data.js"></script>
 <script src="assets/js/main.js"></script>
 <script>
-  /* Route: projects.html[?type={tag}&region={region}]
+  /* Route: projects.html[?sector={HDB|Condo|Landed|Commercial}&type={tag}&region={region}&view={grid|list|map}]
      Laravel equivalent: /projects */
   renderLayout("projects");
   const TAGS = ["All", ...new Set(PROJECTS.map((p) => p.tag))];
   const regionOf = (p) => LOCATIONS.find((l) => l.name === p.area)?.region;
   let tag = TAGS.includes(params.get("type")) ? params.get("type") : "All";
   let region = REGIONS.includes(params.get("region")) ? params.get("region") : "All";
+  let sector = SECTORS.includes(params.get("sector")) ? params.get("sector") : "All";
+  const VIEWS = { grid: "Grid", list: "List", map: "Map" };
+  let view = VIEWS[params.get("view")] ? params.get("view") : "grid";
+  const SECTOR_TEXT = { All: "Every project", HDB: "Flats & BTOs", Condo: "Condos & ECs", Landed: "Terrace to bungalow", Commercial: "Clinics, F&B & offices" };
+  const sectorImg = (sec) => (sec === "All" ? projBySlug("bishan-kitchen-cabinets") : PROJECTS.find((p) => sectorOf(p) === sec)).img;
+  const sectorCount = (sec) => PROJECTS.filter((p) => sec === "All" || sectorOf(p) === sec).length;
 
   $("#page").innerHTML = `
   <section class="page-hero">
@@ -45,12 +51,28 @@
 
   <section class="section" style="padding-top:clamp(48px,6vw,80px)">
     <div class="container">
+      <div class="section-head split" style="margin-bottom:28px">
+        <div>
+          <span class="eyebrow">Featured projects by property type</span>
+          <h2 class="display h2 section-title" style="margin-top:20px">Pick your <span class="serif ember">kind of home.</span></h2>
+        </div>
+        <p class="lead">Every property type comes with its own rules, from HDB permits to MCST approvals and BCA submissions. See what we've built for homes like yours.</p>
+      </div>
+      <div class="sectors" id="sectorFilter">${["All", ...SECTORS].map((sec) => `
+        <button class="sector ${sec === sector ? "active" : ""}" data-v="${sec}">
+          <img src="${sectorImg(sec)}" alt="" loading="lazy">
+          <b>${sec === "All" ? "All projects" : sec}</b><span>${SECTOR_TEXT[sec]} · ${sectorCount(sec)}</span>
+        </button>`).join("")}</div>
       <div class="filter-bar" id="tagFilter">${TAGS.map((t) => `<button class="chip ${t === tag ? "active" : ""}" data-v="${t}">${t}</button>`).join("")}</div>
       <div class="filter-bar" id="regionFilter">
         ${["All", ...REGIONS].map((r) => `<button class="chip ${r === region ? "active" : ""}" data-v="${r}">${r === "All" ? "All regions" : r}</button>`).join("")}
+      </div>
+      <div class="filter-bar">
+        <div class="view-toggle" id="viewToggle" role="group" aria-label="View">${Object.entries(VIEWS).map(([k, v]) => `
+          <button class="${k === view ? "active" : ""}" data-v="${k}" aria-pressed="${k === view}">${icon(k)} ${v}</button>`).join("")}</div>
         <span class="count" id="pjCount"></span>
       </div>
-      <div class="projects flat" id="pjGrid"></div>
+      <div id="pjGrid"></div>
     </div>
   </section>
 
@@ -70,28 +92,73 @@
     </div>
   </section>`;
 
+  const projectRow = (p) => `
+    <a class="pj-row" href="project.html?p=${p.slug}">
+      <img src="${p.img}" alt="" loading="lazy">
+      <div><b>${p.title}</b><small><span>${icon("pin")} ${p.area}</span><span>${p.property}</span><span>${p.duration}</span><span>${p.year}</span></small></div>
+      <span class="go">${icon("arrowUR")}</span>
+    </a>`;
+
+  // Map view: pins light up where the filtered projects are; clicking one lists them
+  const mapSide = (list, slug) => {
+    const l = locBySlug(slug), here = list.filter((p) => areaSlug(p.area) === slug);
+    $$("#pjGrid .pin-dot").forEach((d) => d.classList.toggle("on", d.dataset.slug === slug));
+    $("#mapSide").innerHTML = `
+      <span class="eyebrow">${l.region} region</span>
+      <h3>${here.length} project${here.length === 1 ? "" : "s"} in ${l.name}</h3>
+      ${here.map((p) => `<a href="project.html?p=${p.slug}"><img src="${p.img}" alt=""><div><b>${p.title}</b><small>${p.property} · ${p.year}</small></div></a>`).join("")}`;
+  };
+  const renderMap = (list) => {
+    $("#pjGrid").innerHTML = `
+      <div class="pj-map">
+        <div class="sg-map">${sgMapSVG()}</div>
+        <aside class="map-side" id="mapSide"><span class="eyebrow">Featured projects by location</span><h3>Pick a pin</h3><p>Orange pins have projects that match your filters. Select one to see them.</p></aside>
+      </div>`;
+    const counts = {};
+    list.forEach((p) => { const k = areaSlug(p.area); counts[k] = (counts[k] || 0) + 1; });
+    $$("#pjGrid .pin-dot").forEach((d) => {
+      const n = counts[d.dataset.slug] || 0;
+      d.classList.add(n ? "has" : "none");
+      if (n) d.querySelector("text").innerHTML += ` <tspan>${n}</tspan>`;
+      d.addEventListener("click", (e) => { e.preventDefault(); mapSide(list, d.dataset.slug); });
+    });
+    const first = Object.keys(counts)[0];
+    if (first) mapSide(list, first);
+  };
+
   const render = () => {
-    const list = PROJECTS.filter((p) => (tag === "All" || p.tag === tag) && (region === "All" || regionOf(p) === region));
+    const list = PROJECTS.filter((p) => (tag === "All" || p.tag === tag) && (region === "All" || regionOf(p) === region) && (sector === "All" || sectorOf(p) === sector));
     $("#pjCount").textContent = `${list.length} project${list.length === 1 ? "" : "s"}`;
-    $("#pjGrid").innerHTML = list.length
-      ? list.map(projectCard).join("")
-      : `<div class="empty" style="grid-column:1/-1">No ${tag === "All" ? "" : tag.toLowerCase() + " "}projects in the ${region} region yet. <a href="contact.html" style="color:var(--ember);font-weight:600">Be the first →</a></div>`;
+    const grid = $("#pjGrid");
+    grid.className = view === "grid" ? "projects flat" : view === "list" ? "pj-list" : "";
+    if (!list.length) {
+      grid.className = "";
+      grid.innerHTML = `<div class="empty">No projects match these filters yet. <a href="contact.html" style="color:var(--ember);font-weight:600">Be the first →</a></div>`;
+    } else if (view === "map") renderMap(list);
+    else grid.innerHTML = list.map(view === "grid" ? projectCard : projectRow).join("");
     // newly rendered cards: show immediately rather than waiting for scroll
     requestAnimationFrame(() => $$("#pjGrid .reveal").forEach((el) => el.classList.add("in")));
     const q = new URLSearchParams();
+    if (sector !== "All") q.set("sector", sector);
     if (tag !== "All") q.set("type", tag);
     if (region !== "All") q.set("region", region);
+    if (view !== "grid") q.set("view", view);
     history.replaceState(null, "", `projects.html${q.size ? "?" + q : ""}`);
   };
 
   const bindFilter = (id, set) => $(id).addEventListener("click", (e) => {
-    const b = e.target.closest(".chip"); if (!b) return;
+    const b = e.target.closest("button"); if (!b) return;
     set(b.dataset.v);
-    $$(`${id} .chip`).forEach((c) => c.classList.toggle("active", c === b));
+    $$(`${id} button`).forEach((c) => {
+      c.classList.toggle("active", c === b);
+      if (c.hasAttribute("aria-pressed")) c.setAttribute("aria-pressed", c === b);
+    });
     render();
   });
+  bindFilter("#sectorFilter", (v) => (sector = v));
   bindFilter("#tagFilter", (v) => (tag = v));
   bindFilter("#regionFilter", (v) => (region = v));
+  bindFilter("#viewToggle", (v) => (view = v));
 
   render();
   initReveal();

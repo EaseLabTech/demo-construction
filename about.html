@@ -71,6 +71,19 @@
     </div>
   </section>
 
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">Safety &amp; sustainability</span>
+          <h2 class="display h2 reveal section-title" style="margin-top:20px">Safe crews, <span class="serif ember">lighter footprint.</span></h2>
+        </div>
+        <p class="lead reveal">We track safety and waste on every job and publish the figures here each year, along with how we use them to do better.</p>
+      </div>
+      <div class="stats">${impactStats()}</div>
+    </div>
+  </section>
+
   <section class="section ba-section">
     <div class="container">
       <div class="section-head split">
@@ -108,10 +121,15 @@
           <span class="eyebrow reveal">Licences &amp; accreditation</span>
           <h2 class="display h2 reveal section-title" style="margin-top:20px">Fully licensed. <span class="serif">Fully insured.</span></h2>
         </div>
-        <p class="lead reveal">We're happy to share licence numbers before any job.</p>
+        <div class="reveal" style="display:grid;gap:20px;justify-items:start">
+          <p class="lead" style="margin:0">We're happy to share licence numbers before any job.</p>
+          <button class="btn btn-ghost" data-open-certs>View our certificates ${icon("arrow")}</button>
+        </div>
       </div>
       <div class="certs">${CERTS.map((c, i) => `
         <div class="cert reveal" style="--d:${i * 0.08}s"><span class="pk-ico">${icon("award")}</span><div><b>${c.name}</b><span>${c.text}</span></div></div>`).join("")}</div>
+      <div class="brands-label reveal" style="margin-top:56px">Brands we install &amp; service</div>
+      <div class="reveal">${brandStrip()}</div>
     </div>
   </section>
 
@@ -124,6 +142,7 @@
           <p class="lead">See our work, or get a quote in 60 seconds.</p>
         </div>
         <div class="actions">
+          <a class="btn btn-lg" href="careers.html">${icon("briefcase")} Join our team</a>
           <a class="btn btn-lg" href="projects.html">${icon("arrow")} See our projects</a>
           <a class="btn btn-wa btn-lg" href="contact.html">Get a free quote</a>
         </div>

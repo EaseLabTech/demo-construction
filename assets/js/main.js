@@ -17,6 +17,13 @@ const LOGO = `
   <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V9l8-5 8 5v11"/><path d="M9 20v-6h6v6"/></svg></span>
   <span>Ferron<small>CONSTRUCTION · SG</small></span>`;
 
+const COMPANY_PAGES = [
+  { key: "about", name: "About us", href: "about.html", icon: "users", text: "Our story, team & licences" },
+  { key: "academy", name: "Ferron Academy", href: "academy.html", icon: "cap", text: "Courses for trades & homeowners" },
+  { key: "careers", name: "Careers", href: "careers.html", icon: "briefcase", text: "Join our licensed crew" },
+  { key: "insights", name: "Insights", href: "insights.html", icon: "doc", text: "Guides, news & case studies" },
+];
+
 /* ---------- Layout ---------- */
 function renderLayout(active = "") {
   const megaItems = SERVICES.map((s) => `
@@ -57,7 +64,15 @@ function renderLayout(active = "") {
         </li>
         <li><a href="areas.html" class="${active === "locations" ? "active" : ""}">Areas</a></li>
         <li><a href="projects.html" class="${active === "projects" ? "active" : ""}">Projects</a></li>
-        <li><a href="about.html" class="${active === "about" ? "active" : ""}">About</a></li>
+        <li class="has-mega">
+          <a href="about.html" class="${COMPANY_PAGES.some((c) => c.key === active) ? "active" : ""}">Company
+            <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m2 3.5 3 3 3-3"/></svg></a>
+          <div class="mega mini">${COMPANY_PAGES.map((c) => `
+            <a class="mega-item" href="${c.href}">
+              <span class="mi-ico">${icon(c.icon)}</span>
+              <span><b>${c.name}</b><span>${c.text}</span></span>
+            </a>`).join("")}</div>
+        </li>
         <li><a href="contact.html" class="${active === "contact" ? "active" : ""}">Contact</a></li>
       </ul>
       <div class="nav-cta">
@@ -78,6 +93,9 @@ function renderLayout(active = "") {
       <a href="areas.html">Service areas ${icon("arrowUR")}</a>
       <a href="projects.html">Projects ${icon("arrowUR")}</a>
       <a href="about.html">About us ${icon("arrowUR")}</a>
+      <a href="academy.html">Academy ${icon("arrowUR")}</a>
+      <a href="careers.html">Careers ${icon("arrowUR")}</a>
+      <a href="insights.html">Insights ${icon("arrowUR")}</a>
       <a href="contact.html">Get a quote ${icon("arrowUR")}</a>
     </nav>
     <div class="drawer-services">${SERVICES.map((s) => `<a class="chip" href="service.html?s=${s.slug}">${s.name}</a>`).join("")}</div>
@@ -112,10 +130,13 @@ function renderLayout(active = "") {
           <h4>Company</h4>
           <ul>
             <li><a href="about.html">About us</a></li>
+            <li><a href="academy.html">Ferron Academy</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="insights.html">Insights &amp; news</a></li>
+            <li><a href="#" data-open-certs>Certificates</a></li>
             <li><a href="services.html">All services</a></li>
             <li><a href="projects.html">Projects</a></li>
             <li><a href="areas.html">Service areas</a></li>
-            <li><a href="index.html#reviews">Reviews</a></li>
             <li><a href="index.html#faq">FAQ</a></li>
             <li><a href="contact.html">Contact &amp; quote</a></li>
           </ul>
@@ -148,7 +169,16 @@ function renderLayout(active = "") {
   </div>`;
 
   document.body.insertAdjacentHTML("afterbegin", header);
-  document.body.insertAdjacentHTML("beforeend", footer);
+  document.body.insertAdjacentHTML("beforeend", footer + certsDialog());
+
+  // certificates dialog: any [data-open-certs] element opens it
+  const certModal = $("#certModal");
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("[data-open-certs]")) return;
+    e.preventDefault();
+    certModal.showModal();
+  });
+  initDialog(certModal);
 
   // nav state
   const nav = $("#nav");
@@ -383,3 +413,60 @@ function hydrateIcons(root = document) {
     else el.innerHTML = icon(el.dataset.i);
   });
 }
+
+/* ---------- Dialogs ---------- */
+/* Close a <dialog class="modal"> on its [data-close] buttons or a backdrop click */
+function initDialog(dlg) {
+  dlg.addEventListener("click", (e) => {
+    if (e.target === dlg || e.target.closest("[data-close]")) dlg.close();
+  });
+}
+
+const certsDialog = () => `
+  <dialog class="modal" id="certModal" aria-labelledby="certTitle">
+    <div class="modal-head">
+      <div><span class="eyebrow">Licences &amp; accreditation</span><h3 id="certTitle">Our certificates</h3></div>
+      <button class="modal-x" data-close aria-label="Close">${icon("x")}</button>
+    </div>
+    <div class="cert-docs">${CERTS.map((c) => `
+      <div class="cert-doc">
+        <span class="cd-seal">${icon("award")}</span>
+        <small>${c.issuer}</small>
+        <b>${c.name}</b>
+        <p>${c.text}</p>
+        <div class="cd-meta"><span>${c.ref}</span><span>Valid to ${c.valid}</span></div>
+      </div>`).join("")}</div>
+    <p class="modal-note">Licence numbers and certificate copies are shared on request before any job.</p>
+  </dialog>`;
+
+/* ---------- More components ---------- */
+const fmtDate = (iso) => new Date(iso + "T00:00:00").toLocaleDateString("en-SG", { day: "numeric", month: "short", year: "numeric" });
+
+const newsCard = (n, i = 0) => `
+  <a class="news reveal" style="--d:${(i % 3) * 0.08}s" href="insights.html?a=${n.slug}">
+    <div class="news-media"><img src="${n.img}" alt="" loading="lazy"><span class="pj-tag">${n.cat}</span></div>
+    <div class="news-body">
+      <small>${fmtDate(n.date)} · ${n.read} min read</small>
+      <h3>${n.title}</h3>
+      <p>${n.excerpt}</p>
+      <span class="news-go">Read more ${icon("arrow")}</span>
+    </div>
+  </a>`;
+
+const pillarCards = () => PILLARS.map((p, i) => `
+  <div class="pillar reveal" style="--d:${i * 0.08}s">
+    <span class="pl-n">0${i + 1}</span>
+    <span class="pk-ico">${icon(p.icon)}</span>
+    <h3>${p.title}</h3>
+    <p>${p.text}</p>
+    <small>${icon("check")} ${p.proof}</small>
+  </div>`).join("");
+
+const impactStats = () => IMPACT.map((s, i) => `
+  <div class="stat reveal" style="--d:${i * 0.1}s"><b><span data-count="${s.value}" ${s.dec ? `data-dec="${s.dec}"` : ""}>0</span><sup>${s.suffix || ""}</sup></b><span>${s.label}</span></div>`).join("");
+
+const brandStrip = () => `
+  <div class="brands" aria-label="Brands we install">
+    ${[BRANDS, [...BRANDS.slice(6), ...BRANDS.slice(0, 6)]].map((row) => `
+    <div class="brands-track">${[...row, ...row].map((b) => `<span>${b}</span>`).join("")}</div>`).join("")}
+  </div>`;

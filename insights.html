@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insights & News — Ferron Construction SG</title>
+  <meta name="description" content="Home maintenance guides, HDB permit tips, project case studies and company news from Ferron Construction.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<main id="page"></main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+  /* Routes: insights.html[?cat={category}]  → list
+             insights.html?a={slug}          → article
+     Laravel equivalent: /insights and /insights/{post} */
+  renderLayout("insights");
+
+  const article = NEWS.find((n) => n.slug === params.get("a"));
+  const CATS = ["All", ...new Set(NEWS.map((n) => n.cat))];
+  let cat = CATS.includes(params.get("cat")) ? params.get("cat") : "All";
+
+  const cta = `
+  <section class="container">
+    <div class="cta-big reveal">
+      <img src="${IMG("1504307651254-35680f356dfd", 1800)}" alt="">
+      <div class="row">
+        <div>
+          <h2 class="display h2">Rather leave it to <span class="serif">a pro?</span></h2>
+          <p class="lead">Send us a photo and get an itemised quote within 15 minutes.</p>
+        </div>
+        <div class="actions">
+          <a class="btn btn-lg" href="contact.html">${icon("arrow")} Get a free quote</a>
+          <a class="btn btn-wa btn-lg" target="_blank" rel="noopener" href="${waLink()}">${WA_ICON} WhatsApp us</a>
+        </div>
+      </div>
+    </div>
+  </section>`;
+
+  if (article) {
+    document.title = `${article.title} — Ferron Construction SG`;
+    const more = NEWS.filter((n) => n !== article).slice(0, 3);
+    $("#page").innerHTML = `
+    <section class="page-hero">
+      <div class="container">
+        <article class="article">
+          <nav class="crumbs"><a href="index.html">Home</a><i>/</i><a href="insights.html">Insights</a><i>/</i><a href="insights.html?cat=${article.cat}">${article.cat}</a></nav>
+          <span class="eyebrow">${article.cat}</span>
+          <h1 class="display h2" style="margin-top:20px">${article.title}</h1>
+          <p class="lead">${article.excerpt}</p>
+          <div class="article-meta"><span>${fmtDate(article.date)}</span><span>${article.read} min read</span><span>By the Ferron team</span></div>
+          <div class="article-media"><img src="${article.img.replace("w=900", "w=1600")}" alt=""></div>
+          <div class="article-body">${article.body.map((p) => `<p>${p}</p>`).join("")}</div>
+          ${article.slug === "clinic-refit-case-study" ? `<a class="btn btn-ghost btn-lg" href="project.html?p=novena-clinic-refit">View the project ${icon("arrow")}</a>` : ""}
+        </article>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="section-head split">
+          <div><span class="eyebrow reveal">Keep reading</span><h2 class="display h2 reveal section-title" style="margin-top:20px">More from <span class="serif ember">Ferron.</span></h2></div>
+        </div>
+        <div class="news-grid">${more.map(newsCard).join("")}</div>
+      </div>
+    </section>
+    ${cta}`;
+  } else {
+    $("#page").innerHTML = `
+    <section class="page-hero">
+      <div class="container">
+        <nav class="crumbs"><a href="index.html">Home</a><i>/</i><a href="about.html">Company</a><i>/</i><span>Insights</span></nav>
+        <div class="page-hero-grid">
+          <div>
+            <span class="eyebrow">Insights &amp; news</span>
+            <h1 class="display h1 page-title">Notes from<br><span class="serif ember">the site.</span></h1>
+          </div>
+          <p class="lead">Maintenance guides, permit explainers, project case studies and company news, written by the technicians and project managers who do the work.</p>
+        </div>
+      </div>
+    </section>
+    <section class="section" style="padding-top:clamp(48px,6vw,80px)">
+      <div class="container">
+        <div class="filter-bar" id="catFilter">
+          ${CATS.map((c) => `<button class="chip ${c === cat ? "active" : ""}" data-v="${c}">${c === "All" ? "All topics" : c}</button>`).join("")}
+          <span class="count" id="newsCount"></span>
+        </div>
+        <div class="news-grid" id="newsGrid"></div>
+      </div>
+    </section>
+    ${cta}`;
+
+    const render = () => {
+      const list = NEWS.filter((n) => cat === "All" || n.cat === cat);
+      $("#newsCount").textContent = `${list.length} article${list.length === 1 ? "" : "s"}`;
+      $("#newsGrid").innerHTML = list.map(newsCard).join("");
+      requestAnimationFrame(() => $$("#newsGrid .reveal").forEach((el) => el.classList.add("in")));
+      history.replaceState(null, "", "insights.html" + (cat === "All" ? "" : "?cat=" + cat));
+    };
+    $("#catFilter").addEventListener("click", (e) => {
+      const b = e.target.closest(".chip"); if (!b) return;
+      cat = b.dataset.v;
+      $$("#catFilter .chip").forEach((c) => c.classList.toggle("active", c === b));
+      render();
+    });
+    render();
+  }
+
+  initReveal();
+</script>
+</body>
+</html>

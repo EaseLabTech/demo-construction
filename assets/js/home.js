@@ -63,8 +63,16 @@ setArea("tampines");
 /* ---------- Before / after ---------- */
 initBA($("#ba"));
 
+/* ---------- How we work ---------- */
+$("#pillars").innerHTML = pillarCards();
+$("#impact").innerHTML = impactStats();
+
 /* ---------- Projects ---------- */
 $("#projectGrid").innerHTML = PROJECTS.slice(0, 6).map(projectCard).join("");
+
+/* ---------- Certificates & brands ---------- */
+$("#certChips").innerHTML = CERTS.map((c) => `<span>${icon("award")} ${c.name}</span>`).join("");
+$("#brands").innerHTML = brandStrip();
 
 /* ---------- Reviews ---------- */
 $("#ratingStars").innerHTML = icon("star").repeat(5);
@@ -75,6 +83,9 @@ const car = $("#carousel");
 const step = () => car.querySelector(".review").offsetWidth + 14;
 $("#carPrev").onclick = () => car.scrollBy({ left: -step(), behavior: "smooth" });
 $("#carNext").onclick = () => car.scrollBy({ left: step(), behavior: "smooth" });
+
+/* ---------- Latest updates ---------- */
+$("#newsGrid").innerHTML = NEWS.slice(0, 3).map(newsCard).join("");
 
 /* ---------- Quote wizard ---------- */
 mountWizard($("#wizard"));

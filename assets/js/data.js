@@ -251,7 +251,27 @@ const PROJECTS = [
     scope: ["Pipe & cable detection", "Floating console mounting", "Mirror & art rail", "Concealed trunking", "Laser levelling", "Dust-free drilling"],
     review: { name: "Ben Tay", text: "Everything is perfectly level and there's not a speck of dust. Quick and tidy." },
   },
+  {
+    slug: "novena-clinic-refit", title: "Medical clinic refit", area: "Novena", tag: "Renovation", service: "electrical",
+    property: "Commercial · Clinic", duration: "4 weeks", budget: "S$45k–55k", year: 2025,
+    img: IMG("1519494026892-80bbd2d6fd0d", 900), gallery: ["1497366216548-37526070297c", "1497366811353-6870744d04b2"],
+    summary: "A GP clinic refit carried out over nights and weekends so patients were never turned away, with new consult rooms, clinical lighting, hand-wash points and an accessible toilet.",
+    scope: ["Night & weekend phasing", "Drywall consult rooms", "Clinical-grade lighting", "Hand-wash points & plumbing", "Accessible toilet", "Fire safety sign-off"],
+    review: { name: "Dr. Aaron Seah", text: "We didn't lose a single clinic day. Their site lead coordinated with building management so we never had to." },
+  },
+  {
+    slug: "jurong-east-cafe-fitout", title: "Neighbourhood café fit-out", area: "Jurong East", tag: "Construction", service: "plumbing",
+    property: "Commercial · F&B", duration: "5 weeks", budget: "S$38k–46k", year: 2024,
+    img: IMG("1554118811-1e0d58224f24", 900), gallery: ["1501339847302-ac426a4a7cbb", "1445116572660-236099ec97a0"],
+    summary: "An empty shell unit turned into a 40-seat café, including grease-trap plumbing, kitchen exhaust, a feature bar counter and an SFA-compliant layout.",
+    scope: ["SFA-compliant layout", "Grease trap & floor traps", "Kitchen exhaust ducting", "3-phase power upgrade", "Bar counter carpentry", "Tiling & feature lighting"],
+    review: { name: "Hui Min Goh", text: "Opened on the date we promised our landlord. The bar counter is what everyone photographs." },
+  },
 ];
+
+/* Property type ("sector") is the first part of the property label */
+const SECTORS = ["HDB", "Condo", "Landed", "Commercial"];
+const sectorOf = (p) => p.property.split(" · ")[0];
 
 /* About page */
 const MILESTONES = [
@@ -277,10 +297,160 @@ const TEAM = [
 ];
 
 const CERTS = [
-  { name: "BCA Registered", text: "Building & Construction Authority contractor registration" },
-  { name: "EMA Licensed", text: "Licensed electrical workers for all installation work" },
-  { name: "PUB Licensed", text: "Licensed plumbers for water service work" },
-  { name: "bizSAFE Level 3", text: "Workplace safety & health risk management certified" },
+  { name: "BCA Registered", text: "Building & Construction Authority contractor registration", issuer: "BCA Singapore", ref: "CW01 · Grade C3", valid: "2027" },
+  { name: "EMA Licensed", text: "Licensed electrical workers for all installation work", issuer: "Energy Market Authority", ref: "LEW · Grade 8", valid: "2027" },
+  { name: "PUB Licensed", text: "Licensed plumbers for water service work", issuer: "PUB, Singapore's National Water Agency", ref: "LP · Water service work", valid: "2026" },
+  { name: "bizSAFE Level 3", text: "Workplace safety & health risk management certified", issuer: "Workplace Safety & Health Council", ref: "Risk management", valid: "2026" },
+  { name: "ISO 9001:2015", text: "Quality management system for all site and office operations", issuer: "Accredited certification body", ref: "Quality management", valid: "2027" },
+  { name: "ISO 45001:2018", text: "Occupational health & safety management system", issuer: "Accredited certification body", ref: "OH&S management", valid: "2027" },
+];
+
+/* How we work: the four commitments every crew signs up to */
+const PILLARS = [
+  { icon: "hardhat", title: "Safety", text: "Toolbox briefing before every job, PPE on every site and dust barriers in every home. Your family and our crew go home safe.", proof: "0 lost-time incidents in 2025" },
+  { icon: "heart", title: "Integrity", text: "The price we quote is the price you pay. If we find something extra, we stop, show you a photo and let you decide.", proof: "98% of jobs billed at quoted price" },
+  { icon: "users", title: "Teamwork", text: "One coordinator and one WhatsApp group for the whole job. Electricians, plumbers and carpenters plan the work together.", proof: "1 point of contact per project" },
+  { icon: "award", title: "Quality", text: "Every job is signed off against a checklist, photographed and covered by a written warranty of up to five years.", proof: "Under 1% warranty call-backs" },
+];
+
+/* Safety & sustainability figures: { value, dec?, suffix?, label } */
+const IMPACT = [
+  { value: 1.2, dec: 1, suffix: "M", label: "Accident-free work hours" },
+  { value: 100, suffix: "%", label: "Crew trained in-house each year" },
+  { value: 42, suffix: "t", label: "Renovation waste recycled in 2025" },
+  { value: 90, suffix: "%", label: "Jobs using low-VOC paint" },
+];
+
+/* Brands our crew installs and services */
+const BRANDS = ["Nippon Paint", "Dulux", "Daikin", "Mitsubishi Electric", "Grohe", "Häfele", "Schneider Electric", "Philips", "TOTO", "Sika", "Joven", "Blum"];
+
+/* Insights / latest updates: insights.html?a={slug} */
+const NEWS = [
+  {
+    slug: "hdb-reno-permit-guide", cat: "Guides", date: "2026-09-18", read: 6,
+    title: "HDB renovation permits: what needs one and what doesn't",
+    img: IMG("1503387762-592deb58ef4e", 900),
+    excerpt: "Hacking, window replacement and toilet works need approval. Painting and most carpentry don't. Here's the short list.",
+    body: [
+      "Most small repairs in an HDB flat need no permit at all. Painting, replacing tiles over existing ones, built-in carpentry and changing light fittings can all go ahead without HDB approval.",
+      "You'll need a permit for hacking walls or floors, replacing windows, works in the bathroom that touch the waterproofing membrane, and anything involving gas pipes. As an HDB-registered renovation contractor we apply for these on your behalf.",
+      "Approval usually takes 1–3 working days for straightforward jobs. We build that into the schedule so your start date doesn't slip.",
+    ],
+  },
+  {
+    slug: "academy-first-cohort", cat: "Academy", date: "2026-08-30", read: 3,
+    title: "Ferron Academy graduates its first apprentice cohort",
+    img: IMG("1581578731548-c64695cc6952", 900),
+    excerpt: "Fourteen apprentices completed 12 weeks of electrical, plumbing and waterproofing training, and all fourteen joined our crews.",
+    body: [
+      "Fourteen apprentices have completed the first 12-week Ferron Academy programme, covering electrical basics, plumbing, waterproofing and site safety.",
+      "Each apprentice spent half the programme in our Geylang workshop and half on live jobs, paired with a senior technician. All fourteen have now joined our regional crews.",
+      "Applications for the next intake open in November. Homeowner workshops continue every month.",
+    ],
+  },
+  {
+    slug: "monsoon-leak-checklist", cat: "Guides", date: "2026-08-12", read: 4,
+    title: "Before the monsoon: a 10-minute leak checklist",
+    img: IMG("1584622650111-993a426fbf0a", 900),
+    excerpt: "Check silicone joints, floor traps and the ceiling under your bathroom before the November rains arrive.",
+    body: [
+      "The north-east monsoon brings Singapore's heaviest rain from November. Ten minutes of checking now can save a ceiling repair later.",
+      "Look for cracked or black silicone around the shower and basin, slow-draining floor traps, and any brown staining on the ceiling below your bathroom or under the aircon trunking.",
+      "Spot something? Send us a photo on WhatsApp and we'll tell you whether it's a quick reseal or a job for full waterproofing.",
+    ],
+  },
+  {
+    slug: "fifth-regional-hub", cat: "Company", date: "2026-07-02", read: 2,
+    title: "New Punggol hub cuts north-east arrival times",
+    img: IMG("1565008447742-97f6f38c985c", 900),
+    excerpt: "A new crew base near Punggol Digital District brings average arrival times in Sengkang and Punggol under 35 minutes.",
+    body: [
+      "We've opened a new crew base near Punggol Digital District, our sixth across the island.",
+      "With eight technicians and two vans stationed there, average arrival times in Punggol, Sengkang and Hougang are now under 35 minutes.",
+    ],
+  },
+  {
+    slug: "clinic-refit-case-study", cat: "Projects", date: "2026-06-15", read: 5,
+    title: "How we refitted a working clinic without closing it",
+    img: IMG("1519494026892-80bbd2d6fd0d", 900),
+    excerpt: "Phased night and weekend work kept a busy Novena GP clinic open throughout a four-week refit.",
+    body: [
+      "A busy GP clinic in Novena needed new consult rooms, lighting and an accessible toilet, but couldn't afford to close.",
+      "We split the job into eleven night and weekend phases, sealing off each zone with dust barriers and handing it back clean before morning clinic.",
+      "Read the full project, including scope and budget, on the project page.",
+    ],
+  },
+  {
+    slug: "low-voc-switch", cat: "Company", date: "2026-05-20", read: 3,
+    title: "Why 90% of our paint jobs now use low-VOC paint",
+    img: IMG("1562259949-e8e7689d7828", 900),
+    excerpt: "Low-VOC paint lets families stay home during repainting, and it's now our default at no extra cost.",
+    body: [
+      "Low-VOC paints release far fewer fumes while drying, so most families can stay in the flat while we paint.",
+      "We've made low-VOC paint our default on interior jobs at no extra charge. It's one part of a wider push that also saw us recycle 42 tonnes of renovation waste last year.",
+    ],
+  },
+];
+
+/* Ferron Academy: training for tradespeople and homeowners */
+const ACADEMY = {
+  about: "Ferron Academy runs hands-on courses for people entering the trades and short workshops for homeowners. Every course is taught by our own licensed technicians in our Geylang workshop and on live job sites.",
+  goals: [
+    "Grow the next generation of licensed, safety-first tradespeople in Singapore",
+    "Give apprentices real site hours alongside a senior technician",
+    "Help homeowners handle small fixes safely and know when to call a pro",
+    "Raise workmanship standards across the home repair industry",
+  ],
+  conditions: [
+    "Tradespeople courses: aged 18+, Singapore Citizen, PR or valid work pass",
+    "Electrical and plumbing courses build towards EMA and PUB licensing requirements",
+    "Homeowner workshops are open to everyone, with no experience needed",
+    "Ferron customers and alumni get 30% off all course fees",
+  ],
+  steps: [
+    { title: "Choose a course", text: "Filter by track, audience or format below." },
+    { title: "Request a seat", text: "Send the enrolment form. We'll confirm on WhatsApp within a day." },
+    { title: "Pay & prepare", text: "Pay by PayNow or card. Safety boots and PPE are provided." },
+    { title: "Train & certify", text: "Attend, pass the practical assessment and receive your certificate." },
+  ],
+  faqs: [
+    { q: "Do I get a certificate?", a: "Yes. Every course ends with a practical assessment and a Ferron Academy certificate. Licensing-track courses also count towards EMA or PUB requirements." },
+    { q: "Can I get a job with Ferron afterwards?", a: "Top apprentices are offered roles on our crews. All fourteen graduates of our first cohort joined us." },
+    { q: "Are the courses in English?", a: "Courses are taught in English, and our trainers can also assist in Mandarin, Malay and Tamil." },
+    { q: "Can my company book a private session?", a: "Yes. We run private safety and maintenance training for property managers and facilities teams. Contact us for a quote." },
+  ],
+};
+
+const TRACKS = [
+  { name: "Electrical", icon: "bolt", text: "Wiring, DB boxes and safety testing" },
+  { name: "Plumbing", icon: "drop", text: "Pipework, fittings and leak repair" },
+  { name: "Waterproofing", icon: "shield", text: "Membranes, injection and ponding tests" },
+  { name: "Carpentry & Finishing", icon: "cabinet", text: "Cabinetry, painting and flooring" },
+  { name: "Site Safety", icon: "hardhat", text: "bizSAFE, PPE and risk assessment" },
+  { name: "Project Management", icon: "doc", text: "Quoting, permits and client care" },
+];
+
+/* fee in S$; audience: Tradespeople | Homeowners; format: Course | Workshop */
+const COURSES = [
+  { slug: "electrical-fundamentals", title: "Domestic electrical fundamentals", track: "Electrical", audience: "Tradespeople", format: "Course", level: "Beginner", duration: "6 weeks", start: "2026-11-09", fee: 1450, seats: 4 },
+  { slug: "db-box-testing", title: "DB box upgrades & safety testing", track: "Electrical", audience: "Tradespeople", format: "Course", level: "Intermediate", duration: "3 weeks", start: "2026-11-23", fee: 980, seats: 7 },
+  { slug: "plumbing-essentials", title: "Plumbing essentials for HDB & condo", track: "Plumbing", audience: "Tradespeople", format: "Course", level: "Beginner", duration: "5 weeks", start: "2026-11-02", fee: 1280, seats: 2 },
+  { slug: "membrane-waterproofing", title: "Bathroom membrane waterproofing", track: "Waterproofing", audience: "Tradespeople", format: "Course", level: "Intermediate", duration: "2 weeks", start: "2026-12-07", fee: 760, seats: 9 },
+  { slug: "bizsafe-level-2", title: "bizSAFE Level 2: risk management", track: "Site Safety", audience: "Tradespeople", format: "Workshop", level: "All levels", duration: "2 days", start: "2026-10-27", fee: 320, seats: 12 },
+  { slug: "quoting-and-permits", title: "Quoting, permits & client care", track: "Project Management", audience: "Tradespeople", format: "Workshop", level: "Intermediate", duration: "1 day", start: "2026-11-14", fee: 240, seats: 10 },
+  { slug: "home-fix-basics", title: "Home fix basics: taps, traps & sealant", track: "Plumbing", audience: "Homeowners", format: "Workshop", level: "Beginner", duration: "3 hours", start: "2026-10-24", fee: 68, seats: 6 },
+  { slug: "paint-like-a-pro", title: "Paint like a pro: prep, cut-in & finish", track: "Carpentry & Finishing", audience: "Homeowners", format: "Workshop", level: "Beginner", duration: "3 hours", start: "2026-11-07", fee: 75, seats: 11 },
+  { slug: "home-electrical-safety", title: "Home electrical safety for families", track: "Electrical", audience: "Homeowners", format: "Workshop", level: "Beginner", duration: "2 hours", start: "2026-11-21", fee: 45, seats: 15 },
+];
+
+/* Careers: open roles */
+const JOBS = [
+  { title: "Licensed Electrician (LEW)", team: "Field crew", type: "Full-time", base: "East hub", exp: "3+ years" },
+  { title: "PUB Licensed Plumber", team: "Field crew", type: "Full-time", base: "West hub", exp: "3+ years" },
+  { title: "Waterproofing Specialist", team: "Field crew", type: "Full-time", base: "Central hub", exp: "2+ years" },
+  { title: "Renovation Project Manager", team: "Projects", type: "Full-time", base: "Robert's Lane HQ", exp: "5+ years" },
+  { title: "Customer Coordinator", team: "Operations", type: "Full-time", base: "Robert's Lane HQ", exp: "1+ years" },
+  { title: "Apprentice Technician", team: "Academy", type: "12-week programme", base: "Geylang workshop", exp: "No experience" },
 ];
 
 const TESTIMONIALS = [
@@ -326,6 +496,17 @@ const ICONS = {
   x: '<path d="M18 6 6 18M6 6l12 12"/>',
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
   moon: '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>',
+  hardhat: '<path d="M2 18h20M4 18v-3a8 8 0 0 1 16 0v3"/><path d="M10 7V5h4v2M12 7v5"/>',
+  heart: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21.2l8.8-8.8a5.5 5.5 0 0 0 0-7.8Z"/>',
+  users: '<circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M16 3.1a4 4 0 0 1 0 7.8M22 21a7 7 0 0 0-5-6.7"/>',
+  leaf: '<path d="M11 20A7 7 0 0 1 4 13c0-6 5-10 16-10 0 11-4 17-9 17Z"/><path d="M4 21c3-6 7-9 11-11"/>',
+  briefcase: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2M2 13h20"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+  map: '<path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3-6-3ZM9 3v15M15 6v15"/>',
+  calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  cap: '<path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/>',
+  doc: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"/><path d="M14 2v6h6M8 13h8M8 17h5"/>',
 };
 
 const icon = (name, cls = "") =>

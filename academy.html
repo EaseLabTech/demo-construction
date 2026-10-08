@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ferron Academy — Trade Courses & Home Workshops | Ferron Construction SG</title>
+  <meta name="description" content="Hands-on electrical, plumbing, waterproofing and safety courses for tradespeople, plus short home-fix workshops for homeowners in Singapore.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<main id="page"></main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+  /* Route: academy.html[?track={name}&course={slug}]
+     Laravel equivalent: /academy */
+  renderLayout("academy");
+
+  const memberFee = (c) => Math.round(c.fee * 0.7);
+  const TABS = [
+    { id: "about", name: "About the academy" },
+    { id: "goals", name: "Goals" },
+    { id: "conditions", name: "Eligibility" },
+    { id: "steps", name: "How to enrol" },
+    { id: "faq", name: "FAQ" },
+  ];
+  let track = TRACKS.some((t) => t.name === params.get("track")) ? params.get("track") : "All";
+  let audience = "All", format = "All";
+
+  $("#page").innerHTML = `
+  <section class="page-hero">
+    <div class="container">
+      <nav class="crumbs"><a href="index.html">Home</a><i>/</i><a href="about.html">Company</a><i>/</i><span>Academy</span></nav>
+      <div class="page-hero-grid">
+        <div>
+          <span class="eyebrow">Ferron Academy</span>
+          <h1 class="display h1 page-title">Learn the trade from<br><span class="serif ember">people who do it.</span></h1>
+        </div>
+        <div style="display:grid;gap:24px">
+          <p class="lead">Hands-on courses for new and experienced tradespeople, and short workshops for homeowners, taught by our own licensed technicians.</p>
+          <div class="hero-actions">
+            <a class="btn btn-ember btn-lg" href="#courses">Browse courses ${icon("arrow")}</a>
+            <a class="btn btn-ghost btn-lg" href="mailto:academy@ferronconstruction.sg?subject=Register%20as%20trainer">Register as trainer</a>
+          </div>
+        </div>
+      </div>
+      <div class="stats" style="margin-top:48px">
+        <div class="stat"><b><span data-count="36">0</span></b><span>Courses run each year</span></div>
+        <div class="stat"><b><span data-count="120">0</span><sup>+</sup></b><span>Homeowner workshops held</span></div>
+        <div class="stat"><b><span data-count="640">0</span><sup>+</sup></b><span>Graduates since 2021</span></div>
+        <div class="stat"><b><span data-count="4.8" data-dec="1">0</span><sup>★</sup></b><span>Average course rating</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:clamp(48px,6vw,80px)">
+    <div class="container">
+      <div class="tabs" role="tablist" aria-label="Academy information">${TABS.map((t, i) => `
+        <button role="tab" id="tab-${t.id}" aria-controls="panel-${t.id}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${t.name}</button>`).join("")}</div>
+
+      <div class="tab-panel" role="tabpanel" id="panel-about" aria-labelledby="tab-about">
+        <div class="info-grid">
+          <div>
+            <h2 class="display h2 section-title" style="margin:0 0 20px">Practical training, <span class="serif">on real sites.</span></h2>
+            <p class="lead" style="margin:0">${ACADEMY.about}</p>
+          </div>
+          <div class="info-facts">
+            <div><small>Target audience</small><b>Tradespeople · Homeowners</b></div>
+            <div><small>Duration</small><b>2-hour workshops to 6-week courses</b></div>
+            <div><small>Language</small><b>English, with Mandarin, Malay &amp; Tamil support</b></div>
+            <div><small>Fees</small><b>From S$45 · 30% off for customers</b></div>
+            <div><small>Where</small><b>Geylang workshop &amp; live job sites</b></div>
+            <div><small>Certificate</small><b>Ferron Academy certificate on passing</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="panel-goals" aria-labelledby="tab-goals" hidden>
+        <ul class="tick-list">${ACADEMY.goals.map((g) => `<li>${icon("check")} ${g}</li>`).join("")}</ul>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="panel-conditions" aria-labelledby="tab-conditions" hidden>
+        <ul class="tick-list">${ACADEMY.conditions.map((g) => `<li>${icon("check")} ${g}</li>`).join("")}</ul>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="panel-steps" aria-labelledby="tab-steps" hidden>
+        <div class="steps-row">${ACADEMY.steps.map((s) => `<div><b>${s.title}</b><p>${s.text}</p></div>`).join("")}</div>
+      </div>
+      <div class="tab-panel faq" role="tabpanel" id="panel-faq" aria-labelledby="tab-faq" hidden>${ACADEMY.faqs.map((f, i) => `
+        <details ${i === 0 ? "open" : ""}><summary>${f.q}<span class="pm">${icon("plus")}</span></summary><p>${f.a}</p></details>`).join("")}</div>
+    </div>
+  </section>
+
+  <section class="section" id="courses" style="padding-top:0;scroll-margin-top:90px">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">Training tracks</span>
+          <h2 class="display h2 reveal section-title" style="margin-top:20px">Six tracks, <span class="serif ember">one standard.</span></h2>
+        </div>
+        <p class="lead reveal">Pick a track to filter the course list, or search for a skill you want to learn.</p>
+      </div>
+      <div class="tracks" id="tracks" style="margin-bottom:40px"></div>
+
+      <div class="course-tools">
+        <div class="loc-search">${icon("search")}<input id="courseSearch" type="search" placeholder="Search courses…" autocomplete="off" aria-label="Search courses"></div>
+        <div class="filter-bar" style="margin:0" id="audFilter">${["All", "Tradespeople", "Homeowners"].map((a) => `<button class="chip ${a === "All" ? "active" : ""}" data-v="${a}">${a === "All" ? "Everyone" : a}</button>`).join("")}</div>
+        <div class="filter-bar" style="margin:0" id="fmtFilter">${["All", "Course", "Workshop"].map((a) => `<button class="chip ${a === "All" ? "active" : ""}" data-v="${a}">${a === "All" ? "All formats" : a + "s"}</button>`).join("")}</div>
+        <span class="count muted" id="courseCount" style="margin-left:auto;font-size:14px"></span>
+      </div>
+      <div class="courses" id="courseGrid"></div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container" style="display:grid;gap:14px">
+      <div class="rate-card reveal">
+        <div><b>Rate the academy</b><div class="muted" id="rateMsg">Took a course with us? Tell us how it went.</div></div>
+        <div class="rate-stars" id="rateStars" role="radiogroup" aria-label="Rating"></div>
+      </div>
+      <div class="contact-strip">
+        <a class="c-card reveal" href="tel:+${COMPANY.phoneRaw}"><span class="pk-ico">${icon("phone")}</span><div><b>${COMPANY.phone}</b><span>Academy enquiries</span></div></a>
+        <a class="c-card reveal" style="--d:.08s" href="mailto:academy@ferronconstruction.sg"><span class="pk-ico">${icon("mail")}</span><div><b>academy@ferronconstruction.sg</b><span>Course &amp; corporate bookings</span></div></a>
+        <a class="c-card reveal" style="--d:.16s" target="_blank" rel="noopener" href="${waLink("Hi Ferron Academy, I have a question about your courses.")}"><span class="pk-ico wa">${WA_ICON}</span><div><b>WhatsApp us</b><span>Replies within the hour</span></div></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">Related</span>
+          <h2 class="display h2 reveal section-title" style="margin-top:20px">Where training <span class="serif">leads next.</span></h2>
+        </div>
+      </div>
+      <div class="values">
+        <a class="value reveal" href="careers.html"><span class="pk-ico">${icon("briefcase")}</span><h3>Careers at Ferron</h3><p>Top apprentices are offered roles on our licensed crews.</p></a>
+        <a class="value reveal" style="--d:.08s" href="insights.html"><span class="pk-ico">${icon("doc")}</span><h3>Home guides</h3><p>Free maintenance guides from our technicians.</p></a>
+        <a class="value reveal" style="--d:.16s" href="services.html"><span class="pk-ico">${icon("hardhat")}</span><h3>Book a pro</h3><p>Rather not DIY? Our crew is about 30 minutes away.</p></a>
+        <a class="value reveal" style="--d:.24s" href="mailto:academy@ferronconstruction.sg?subject=Corporate%20training"><span class="pk-ico">${icon("users")}</span><h3>Corporate training</h3><p>Private safety sessions for property and facilities teams.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <dialog class="modal" id="enrolModal" aria-labelledby="enrolTitle" style="max-width:620px">
+    <form id="enrolForm" novalidate>
+      <div class="modal-head">
+        <div><span class="eyebrow">Request a seat</span><h3 id="enrolTitle">Enrol</h3></div>
+        <button type="button" class="modal-x" data-close aria-label="Close">${icon("x")}</button>
+      </div>
+      <div id="enrolFields">
+        <div class="field"><label for="enCourse">Course</label><select id="enCourse">${COURSES.map((c) => `<option value="${c.slug}">${c.title}</option>`).join("")}</select></div>
+        <div class="field-row">
+          <div class="field"><label for="enName">Name</label><input id="enName" required placeholder="Jane Tan"></div>
+          <div class="field"><label for="enPhone">Mobile</label><input id="enPhone" required type="tel" placeholder="+65 9123 4567"></div>
+        </div>
+        <label class="opt" style="display:block;margin-bottom:14px"><input type="checkbox" id="enMember"><span style="flex-direction:row;align-items:center">${icon("tag")} I'm a Ferron customer or alumnus (30% off)</span></label>
+        <div class="est"><span id="enDate">Starts —</span><b id="enFee">—</b></div>
+        <div class="wz-foot"><span class="muted" style="font-size:13px">We'll confirm on WhatsApp within a day.</span><button class="btn btn-ember btn-lg" type="submit">Request seat</button></div>
+      </div>
+      <div class="wz-done" id="enrolDone" hidden>
+        <div class="ok">${icon("check")}</div>
+        <h3 style="font:600 28px/1.1 var(--f-display);margin:0">Seat requested!</h3>
+        <p class="muted" style="margin:8px auto 24px;max-width:40ch">Our academy team will WhatsApp you to confirm your place and payment details.</p>
+        <a class="btn btn-wa btn-lg" id="enrolWa" target="_blank" rel="noopener">${WA_ICON} Continue on WhatsApp</a>
+      </div>
+    </form>
+  </dialog>`;
+
+  /* ---------- Tabs (arrow keys move between tabs) ---------- */
+  const tabs = $$("[role=tab]");
+  const selectTab = (t) => {
+    tabs.forEach((b) => {
+      const on = b === t;
+      b.setAttribute("aria-selected", on);
+      b.tabIndex = on ? 0 : -1;
+      $("#" + b.getAttribute("aria-controls")).hidden = !on;
+    });
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener("click", () => selectTab(t));
+    t.addEventListener("keydown", (e) => {
+      const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+      if (!d) return;
+      const n = tabs[(i + d + tabs.length) % tabs.length];
+      selectTab(n); n.focus();
+    });
+  });
+
+  /* ---------- Tracks & course catalogue ---------- */
+  const renderTracks = () => {
+    $("#tracks").innerHTML = TRACKS.map((t) => `
+      <button class="track ${t.name === track ? "active" : ""}" data-v="${t.name}" aria-pressed="${t.name === track}">
+        <span class="mi-ico">${icon(t.icon)}</span>
+        <span><b>${t.name}</b><small>${t.text}</small></span>
+        <em>${COURSES.filter((c) => c.track === t.name).length}</em>
+      </button>`).join("");
+  };
+  const courseCard = (c) => `
+    <article class="course">
+      <div class="course-top"><span class="badge ${c.audience === "Homeowners" ? "ember" : "dark"}">${c.audience}</span><span class="badge">${c.format} · ${c.level}</span></div>
+      <h3>${c.title}</h3>
+      <div class="course-facts">
+        <span>${icon("calendar")} ${fmtDate(c.start)}</span>
+        <span>${icon("clock")} ${c.duration}</span>
+        <span>${icon("cap")} ${c.track}</span>
+        <span class="${c.seats <= 4 ? "seats-low" : ""}">${icon("users")} ${c.seats} seats left</span>
+      </div>
+      <div class="course-foot">
+        <div class="fee"><b>S$${c.fee.toLocaleString()}</b><small>S$${memberFee(c).toLocaleString()} for customers</small></div>
+        <button class="btn btn-ember" data-enrol="${c.slug}">Enrol ${icon("arrow")}</button>
+      </div>
+    </article>`;
+  const renderCourses = () => {
+    const q = $("#courseSearch").value.trim().toLowerCase();
+    const list = COURSES.filter((c) =>
+      (track === "All" || c.track === track) && (audience === "All" || c.audience === audience) &&
+      (format === "All" || c.format === format) && (c.title + " " + c.track).toLowerCase().includes(q));
+    $("#courseCount").textContent = `${list.length} course${list.length === 1 ? "" : "s"}${track === "All" ? "" : " in " + track}`;
+    $("#courseGrid").innerHTML = list.length ? list.map(courseCard).join("")
+      : `<div class="empty" style="grid-column:1/-1">No courses match yet. <a href="mailto:academy@ferronconstruction.sg" style="color:var(--ember);font-weight:600">Ask about upcoming dates →</a></div>`;
+  };
+  $("#tracks").addEventListener("click", (e) => {
+    const b = e.target.closest(".track"); if (!b) return;
+    track = track === b.dataset.v ? "All" : b.dataset.v; // click again to clear
+    renderTracks(); renderCourses();
+  });
+  const bindChips = (id, set) => $(id).addEventListener("click", (e) => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    set(b.dataset.v);
+    $$(`${id} .chip`).forEach((c) => c.classList.toggle("active", c === b));
+    renderCourses();
+  });
+  bindChips("#audFilter", (v) => (audience = v));
+  bindChips("#fmtFilter", (v) => (format = v));
+  $("#courseSearch").addEventListener("input", renderCourses);
+  renderTracks();
+  renderCourses();
+
+  /* ---------- Enrol dialog ---------- */
+  const enrol = $("#enrolModal");
+  initDialog(enrol);
+  const updateFee = () => {
+    const c = COURSES.find((x) => x.slug === $("#enCourse").value);
+    $("#enDate").textContent = `Starts ${fmtDate(c.start)} · ${c.duration}`;
+    $("#enFee").textContent = `S$${($("#enMember").checked ? memberFee(c) : c.fee).toLocaleString()}`;
+  };
+  const openEnrol = (slug) => {
+    $("#enCourse").value = slug;
+    $("#enrolFields").hidden = false;
+    $("#enrolDone").hidden = true;
+    updateFee();
+    enrol.showModal();
+  };
+  $("#courseGrid").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-enrol]");
+    if (b) openEnrol(b.dataset.enrol);
+  });
+  $("#enCourse").addEventListener("change", updateFee);
+  $("#enMember").addEventListener("change", updateFee);
+  $("#enrolForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = $("#enName"), phone = $("#enPhone");
+    [name, phone].forEach((f) => (f.style.boxShadow = f.value.trim() ? "" : "inset 0 0 0 2px #e2470f"));
+    if (!name.value.trim() || !phone.value.trim()) return;
+    const c = COURSES.find((x) => x.slug === $("#enCourse").value);
+    $("#enrolWa").href = waLink(`Hi Ferron Academy, I'm ${name.value.trim()}. I'd like a seat on "${c.title}" starting ${fmtDate(c.start)}.${$("#enMember").checked ? " I'm a Ferron customer." : ""}`);
+    $("#enrolFields").hidden = true;
+    $("#enrolDone").hidden = false;
+  });
+  // deep link: academy.html?course={slug} opens the form
+  if (COURSES.some((c) => c.slug === params.get("course"))) openEnrol(params.get("course"));
+
+  /* ---------- Rating (remembered in this browser only) ---------- */
+  const RATE_KEY = "ferron-academy-rating";
+  let rating = 0;
+  try { rating = +localStorage.getItem(RATE_KEY) || 0; } catch {}
+  const renderStars = () => {
+    $("#rateStars").innerHTML = [1, 2, 3, 4, 5].map((n) =>
+      `<button role="radio" aria-checked="${n === rating}" aria-label="${n} star${n > 1 ? "s" : ""}" data-n="${n}" class="${n <= rating ? "on" : ""}">${icon("star")}</button>`).join("");
+    if (rating) $("#rateMsg").textContent = `Thanks! You rated us ${rating}/5.`;
+  };
+  $("#rateStars").addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    rating = +b.dataset.n;
+    try { localStorage.setItem(RATE_KEY, rating); } catch {}
+    renderStars();
+  });
+  renderStars();
+
+  initReveal();
+  initCounters();
+</script>
+</body>
+</html>

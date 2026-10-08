@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Careers — Ferron Construction SG</title>
+  <meta name="description" content="Join Ferron's licensed crew of electricians, plumbers, waterproofing specialists and project managers across Singapore.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<main id="page"></main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+  /* Route: careers.html[?team={team}]
+     Laravel equivalent: /careers */
+  renderLayout("careers");
+
+  const TEAMS = ["All", ...new Set(JOBS.map((j) => j.team))];
+  let team = TEAMS.includes(params.get("team")) ? params.get("team") : "All";
+  const PERKS = [
+    { icon: "shield", title: "Real job security", text: "Every technician is on our payroll with CPF, medical cover and annual leave. No day-rate subcontracting." },
+    { icon: "cap", title: "Paid licensing", text: "We pay for your EMA, PUB and bizSAFE courses and give you study days to prepare." },
+    { icon: "pin", title: "Work near home", text: "Six regional hubs mean you're assigned jobs close to where you live." },
+    { icon: "award", title: "Quality bonus", text: "Quarterly bonus tied to customer ratings and zero call-backs, not just job count." },
+  ];
+  const applyLink = (j) => `mailto:careers@ferronconstruction.sg?subject=${encodeURIComponent("Application: " + j.title)}`;
+
+  $("#page").innerHTML = `
+  <section class="page-hero">
+    <div class="container">
+      <nav class="crumbs"><a href="index.html">Home</a><i>/</i><a href="about.html">Company</a><i>/</i><span>Careers</span></nav>
+      <div class="page-hero-grid">
+        <div>
+          <span class="eyebrow">Careers</span>
+          <h1 class="display h1 page-title">Build a career,<br><span class="serif ember">not just a job.</span></h1>
+        </div>
+        <div style="display:grid;gap:24px">
+          <p class="lead">We're a team of 64 licensed technicians, coordinators and project managers. We hire people who take pride in tidy work and honest quotes, and we train them to get better every year.</p>
+          <div class="hero-actions"><a class="btn btn-ember btn-lg" href="#roles">See open roles ${icon("arrow")}</a><a class="btn btn-ghost btn-lg" href="academy.html">Apprenticeships</a></div>
+        </div>
+      </div>
+      <div class="page-hero-media"><img data-parallax src="${IMG("1581578731548-c64695cc6952", 2000)}" alt="Technicians working together on site"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">Why Ferron</span>
+          <h2 class="display h2 reveal section-title" style="margin-top:20px">We look after the people <span class="serif">who do the work.</span></h2>
+        </div>
+        <p class="lead reveal">Most of our senior technicians started as apprentices. We'd like you to stay for a long time.</p>
+      </div>
+      <div class="values">${PERKS.map((p, i) => `
+        <div class="value reveal" style="--d:${i * 0.08}s"><span class="pk-ico">${icon(p.icon)}</span><h3>${p.title}</h3><p>${p.text}</p></div>`).join("")}</div>
+    </div>
+  </section>
+
+  <section class="section ba-section">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">Our culture</span>
+          <h2 class="display h2 reveal section-title" style="margin-top:20px">Four commitments, <span class="serif ember">everyone</span> keeps.</h2>
+        </div>
+        <p class="lead reveal">These are the standards we hire for and the ones we'll hold you to.</p>
+      </div>
+      <div class="pillars">${pillarCards()}</div>
+      <div class="stats">${impactStats()}</div>
+    </div>
+  </section>
+
+  <section class="section" id="roles" style="scroll-margin-top:90px">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">Open roles</span>
+          <h2 class="display h2 reveal section-title" style="margin-top:20px">Find your <span class="serif ember">next role.</span></h2>
+        </div>
+        <p class="lead reveal">Don't see a fit? Email <a href="mailto:careers@ferronconstruction.sg" style="color:var(--ember-deep);font-weight:600">careers@ferronconstruction.sg</a> and tell us what you do best.</p>
+      </div>
+      <div class="filter-bar" id="teamFilter">
+        ${TEAMS.map((t) => `<button class="chip ${t === team ? "active" : ""}" data-v="${t}">${t === "All" ? "All teams" : t}</button>`).join("")}
+        <span class="count" id="jobCount"></span>
+      </div>
+      <div class="jobs" id="jobs"></div>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="cta-big reveal">
+      <img src="${IMG("1504307651254-35680f356dfd", 1800)}" alt="">
+      <div class="row">
+        <div>
+          <h2 class="display h2">New to the trade? <span class="serif">Start here.</span></h2>
+          <p class="lead">Our 12-week paid apprenticeship takes you from zero to working on live jobs.</p>
+        </div>
+        <div class="actions">
+          <a class="btn btn-lg" href="academy.html">${icon("cap")} Ferron Academy</a>
+          <a class="btn btn-wa btn-lg" target="_blank" rel="noopener" href="${waLink("Hi Ferron, I'm interested in a job with your team.")}">${WA_ICON} WhatsApp HR</a>
+        </div>
+      </div>
+    </div>
+  </section>`;
+
+  const render = () => {
+    const list = JOBS.filter((j) => team === "All" || j.team === team);
+    $("#jobCount").textContent = `${list.length} role${list.length === 1 ? "" : "s"}`;
+    $("#jobs").innerHTML = list.map((j) => `
+      <div class="job">
+        <div>
+          <b>${j.title}</b>
+          <div class="job-meta"><span>${icon("users")} ${j.team}</span><span>${icon("clock")} ${j.type}</span><span>${icon("pin")} ${j.base}</span><span>${icon("award")} ${j.exp}</span></div>
+        </div>
+        <a class="btn btn-ember" href="${j.team === "Academy" ? "academy.html" : applyLink(j)}">${j.team === "Academy" ? "Learn more" : "Apply"} ${icon("arrow")}</a>
+      </div>`).join("");
+    const q = team === "All" ? "" : "?team=" + encodeURIComponent(team);
+    history.replaceState(null, "", "careers.html" + q);
+  };
+  $("#teamFilter").addEventListener("click", (e) => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    team = b.dataset.v;
+    $$("#teamFilter .chip").forEach((c) => c.classList.toggle("active", c === b));
+    render();
+  });
+  render();
+
+  initReveal();
+  initCounters();
+  initParallax();
+</script>
+</body>
+</html>

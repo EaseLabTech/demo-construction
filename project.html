@@ -59,7 +59,7 @@
           <h2 class="display h2 reveal section-title" style="margin:20px 0 28px">Drag to <span class="serif ember">compare.</span></h2>
           <div class="ba ba-light reveal" id="ba">
             <img src="${big}" alt="After">
-            <img class="before" src="${big}" alt="Before">
+            <img class="before${p.before ? " real" : ""}" src="${p.before ? p.before.replace("w=900", "w=1800") : big}" alt="Before">
             <span class="ba-tag l">Before</span><span class="ba-tag r">After</span>
             <div class="ba-handle"></div>
           </div>

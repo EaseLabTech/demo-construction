@@ -43,8 +43,20 @@
 
   <section class="section" style="padding-top:clamp(40px,5vw,72px)">
     <div class="container">
-      <div class="sg-map reveal"><div id="sgMap"></div>
-        <div class="map-legend"><span><i></i> Service hub</span><span><i class="e"></i> Matches your search</span><span>Tap a pin to open the area</span></div></div>
+      <div class="loc-right areas-map">
+        <div class="sg-map snap reveal">${snapMapMarkup()}</div>
+        <div class="loc-panel reveal" id="locPanel" aria-live="polite">
+          <div class="lp-info">
+            <span class="eyebrow" style="color:rgba(255,255,255,.7)">Selected area</span>
+            <b id="lpName">Pick an area</b>
+            <p id="lpMeta">Hover the map or an area below to see local response times.</p>
+          </div>
+          <div class="lp-actions">
+            <a class="btn btn-ember" id="lpLink" href="#regions">View area page</a>
+            <a class="lp-all" href="contact.html">Get a quote →</a>
+          </div>
+        </div>
+      </div>
       <div class="filter-bar" id="regionJump" style="margin:28px 0 0">
         ${REGIONS.map((r) => `<a class="chip" href="#${r.toLowerCase()}">${r} <span class="muted">· ${inRegion(r).length}</span></a>`).join("")}
         <span class="count" id="areaCount"></span>
@@ -72,7 +84,24 @@
     </div>
   </section>`;
 
-  $("#sgMap").innerHTML = sgMapSVG();
+  $("#sgMap").innerHTML = snapMapSVG();
+  hydrateIcons();
+
+  // Selecting an area updates the panel and the map bubble (same behaviour as the homepage map)
+  const select = (slug) => {
+    const l = locBySlug(slug); if (!l) return;
+    $$(".pin-dot").forEach((p) => p.classList.toggle("sel", p.dataset.slug === slug));
+    $$(".area-card").forEach((a) => a.classList.toggle("on", a.dataset.slug === slug));
+    $("#lpName").textContent = l.name;
+    $("#lpMeta").textContent = `${l.region} region · ${l.homes} · Avg. arrival ~${l.eta} min`;
+    $("#lpLink").href = `location.html?area=${l.slug}`;
+    $("#lpLink").innerHTML = `Services in ${l.name} ${icon("arrow")}`;
+    snapFocus(l);
+    const lp = $("#locPanel");
+    if (lp.dataset.slug !== slug) { lp.dataset.slug = slug; lp.classList.remove("flash"); void lp.offsetWidth; lp.classList.add("flash"); }
+  };
+  initSnapMap(select);
+  $$(".pin-dot").forEach((p) => p.addEventListener("mouseenter", () => select(p.dataset.slug)));
 
   const render = () => {
     const q = $("#q").value.trim().toLowerCase();
@@ -88,7 +117,7 @@
       <div class="region-block" id="${r.toLowerCase()}">
         <div class="region-head"><h2>${r}</h2><span>${icon("clock")} Avg. arrival ${etaRange(r)} · ${inRegion(r).length} areas</span></div>
         <div class="area-cards">${inRegion(r).filter(match).map((l) => `
-          <a class="area-card" href="location.html?area=${l.slug}">
+          <a class="area-card" data-slug="${l.slug}" href="location.html?area=${l.slug}">
             <div class="ac-top"><b>${l.name}</b>${icon("arrowUR")}</div>
             <small>${l.homes}</small>
             <span class="ac-eta">${icon("clock")} ~${l.eta} min arrival</span>
@@ -96,8 +125,13 @@
       </div>`).join("") || `<div class="empty" style="margin-top:32px">No area called “${$("#q").value}” in our list, but we likely still cover it. <a href="contact.html" style="color:var(--ember);font-weight:600">Ask us →</a></div>`;
   };
 
-  $("#q").addEventListener("input", render);
+  $("#regions").addEventListener("mouseover", (e) => { const a = e.target.closest(".area-card"); if (a) select(a.dataset.slug); });
+  $("#q").addEventListener("input", () => {
+    render();
+    const first = $(".area-card"); if ($("#q").value.trim() && first) select(first.dataset.slug);
+  });
   render();
+  select("tampines");
   initReveal();
 </script>
 </body>

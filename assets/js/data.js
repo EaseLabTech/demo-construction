@@ -5,6 +5,8 @@
    ========================================================================== */
 
 const IMG = (id, w = 1200) => `https://images.unsplash.com/photo-${id}?w=${w}&q=75&auto=format&fit=crop`;
+// Pexels photo by id (used for project "before" shots)
+const PXIMG = (id, w = 900) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
 
 const COMPANY = {
   name: "Ferron Construction",
@@ -153,12 +155,12 @@ const LOCATIONS = [
   { slug: "marine-parade", name: "Marine Parade", region: "Central", homes: "HDB · Condo", eta: 25 },
 ];
 
-/* Each project has a detail page: project.html?p={slug} */
+/* Each project has a detail page: project.html?p={slug}. `before` is the pre-work photo used for the before/after reveal. */
 const PROJECTS = [
   {
     slug: "bukit-timah-facade-repaint", title: "Modern facade repaint", area: "Bukit Timah", tag: "Painting", service: "painting",
     property: "Landed · Semi-D", duration: "6 days", budget: "S$8k–10k", year: 2025,
-    img: IMG("1600585154340-be6161a56a0c", 900), gallery: ["1600585154526-990dced4db0d", "1541123603104-512919d6a96c"],
+    img: IMG("1600585154340-be6161a56a0c", 900), before: PXIMG(6129298), gallery: ["1600585154526-990dced4db0d", "1541123603104-512919d6a96c"],
     summary: "A 20-year-old semi-D with chalking, faded paint and hairline cracks. We pressure-washed, sealed the cracks and recoated the whole facade in a weather-shield system rated for Singapore's rain.",
     scope: ["High-pressure wash & mould treatment", "Crack sealing with elastomeric filler", "Alkali-resistant primer", "2 coats weather-shield topcoat", "Gate & grille repainting", "Full site clean-up"],
     review: { name: "Daniel Lim", text: "The house looks newer than when we bought it. Crew was careful with the plants and finished a day early." },
@@ -166,7 +168,7 @@ const PROJECTS = [
   {
     slug: "punggol-5-room-refresh", title: "5-room full refresh", area: "Punggol", tag: "Renovation", service: "painting",
     property: "HDB · 5-room BTO", duration: "3 weeks", budget: "S$28k–34k", year: 2025,
-    img: IMG("1615873968403-89e068629265", 900), gallery: ["1600566753086-00f18fb6b3ea", "1618221195710-dd6b41faaea6"],
+    img: IMG("1615873968403-89e068629265", 900), before: PXIMG(15798784), gallery: ["1600566753086-00f18fb6b3ea", "1618221195710-dd6b41faaea6"],
     summary: "Young family moving into a resale 5-room. One team handled painting, vinyl flooring, lighting and new carpentry so the flat was move-in ready in three weeks.",
     scope: ["Whole-home repaint", "SPC vinyl over existing tiles", "New LED lighting points", "Built-in wardrobes & TV console", "HDB permit handling", "Post-reno chemical cleaning"],
     review: { name: "Priya Nair", text: "One WhatsApp group, one coordinator, zero chasing. Exactly what we needed with a baby on the way." },
@@ -174,7 +176,7 @@ const PROJECTS = [
   {
     slug: "changi-landed-extension", title: "Landed home extension", area: "Changi", tag: "Construction", service: "waterproofing",
     property: "Landed · Terrace", duration: "9 weeks", budget: "S$65k–80k", year: 2024,
-    img: IMG("1600566753190-17f0baa2a6c3", 900), gallery: ["1600585154526-990dced4db0d", "1600566753086-00f18fb6b3ea"],
+    img: IMG("1600566753190-17f0baa2a6c3", 900), before: PXIMG(15798781), gallery: ["1600585154526-990dced4db0d", "1600566753086-00f18fb6b3ea"],
     summary: "A rear extension adding a family room and a covered terrace, with BCA submissions, structural works, roof waterproofing and finishing all under one contract.",
     scope: ["BCA & URA submissions", "RC structure & brickwork", "Torch-on roof membrane", "Electrical & lighting", "Sliding glass doors", "Tiling & painting"],
     review: { name: "Grace Teo", text: "They handled every permit and kept us updated with photos every day. Not a single leak through the monsoon." },
@@ -182,7 +184,7 @@ const PROJECTS = [
   {
     slug: "tampines-bath-waterproofing", title: "Master bath waterproofing", area: "Tampines", tag: "Waterproofing", service: "waterproofing",
     property: "HDB · 4-room", duration: "4 days", budget: "S$2.8k–3.5k", year: 2025,
-    img: IMG("1584622650111-993a426fbf0a", 900), gallery: ["1523413651479-597eb2da0ad6", "1584622650111-993a426fbf0a"],
+    img: IMG("1584622650111-993a426fbf0a", 900), before: PXIMG(4570108), gallery: ["1523413651479-597eb2da0ad6", "1584622650111-993a426fbf0a"],
     summary: "Water was seeping into the unit below. We traced it to a failed membrane under the shower, hacked the floor, re-membraned and passed a 24-hour ponding test before retiling.",
     scope: ["Moisture & thermal leak tracing", "Floor hacking & screeding", "Cementitious membrane, 2 coats", "24-hour ponding test", "Anti-slip floor tiles", "5-year warranty issued"],
     review: { name: "Rachel Tan", text: "Neighbour downstairs finally has a dry ceiling. Clean work and a proper 5-year warranty." },
@@ -190,7 +192,7 @@ const PROJECTS = [
   {
     slug: "clementi-living-flooring", title: "Living room flooring", area: "Clementi", tag: "Flooring", service: "flooring",
     property: "Condo · 3-bedroom", duration: "3 days", budget: "S$4k–5k", year: 2025,
-    img: IMG("1595846519845-68e298c2edd8", 900), gallery: ["1618221195710-dd6b41faaea6", "1631679706909-1844bbd07221"],
+    img: IMG("1595846519845-68e298c2edd8", 900), before: PXIMG(3616756), gallery: ["1618221195710-dd6b41faaea6", "1631679706909-1844bbd07221"],
     summary: "Dull, scratched marble brought back to a mirror finish with diamond polishing and crystallisation, plus new skirting throughout the living and dining area.",
     scope: ["Furniture protection & moving", "Diamond grinding (5 stages)", "Crack & chip filling", "Crystallisation finish", "New skirting", "Daily dust control"],
     review: { name: "Kevin Ho", text: "Floors look brand new. They covered everything and left the place cleaner than before." },
@@ -198,7 +200,7 @@ const PROJECTS = [
   {
     slug: "novena-dining-lighting", title: "Dining & lighting rework", area: "Novena", tag: "Electrical", service: "electrical",
     property: "Condo · 2-bedroom", duration: "2 days", budget: "S$3k–4k", year: 2024,
-    img: IMG("1617104551722-3b2d51366400", 900), gallery: ["1600607687644-c7171b42498f", "1541123603104-512919d6a96c"],
+    img: IMG("1617104551722-3b2d51366400", 900), before: PXIMG(3615735), gallery: ["1600607687644-c7171b42498f", "1541123603104-512919d6a96c"],
     summary: "Tired downlights replaced with a layered lighting plan: dimmable pendants over the dining table, warm cove lights and smart switches, with MCST approval handled for the owner.",
     scope: ["Lighting layout plan", "Pendant & cove lighting", "Dimmers & smart switches", "Concealed wiring", "MCST paperwork", "EMA test certificate"],
     review: { name: "Joanne Koh", text: "The dining room feels like a restaurant now. Neat wiring and no patchy ceiling afterwards." },
@@ -206,7 +208,7 @@ const PROJECTS = [
   {
     slug: "bishan-kitchen-cabinets", title: "Shaker kitchen makeover", area: "Bishan", tag: "Kitchen", service: "kitchen-cabinet",
     property: "Condo · 3-bedroom", duration: "16 days", budget: "S$14k–18k", year: 2025,
-    img: IMG("1600489000022-c2086d79f9d4", 900), gallery: ["1484154218962-a197022b5858", "1556911220-bff31c812dba"],
+    img: IMG("1600489000022-c2086d79f9d4", 900), before: PXIMG(20044946), gallery: ["1484154218962-a197022b5858", "1556911220-bff31c812dba"],
     summary: "Custom shaker cabinets in deep slate with a quartz top, open shelving and full-height storage, built from a 3D render the owner signed off before production.",
     scope: ["3D design & render", "Marine-ply carcass", "Soft-close hinges & runners", "Quartz countertop", "Open oak shelving", "Under-cabinet LED"],
     review: { name: "Marcus Wong", text: "Came out exactly like the 3D render. The quartz top is gorgeous." },
@@ -214,7 +216,7 @@ const PROJECTS = [
   {
     slug: "sengkang-white-kitchen", title: "Bright white kitchen", area: "Sengkang", tag: "Kitchen", service: "kitchen-cabinet",
     property: "HDB · 4-room", duration: "12 days", budget: "S$9k–12k", year: 2024,
-    img: IMG("1484154218962-a197022b5858", 900), gallery: ["1556911220-bff31c812dba", "1600489000022-c2086d79f9d4"],
+    img: IMG("1484154218962-a197022b5858", 900), before: PXIMG(36035073), gallery: ["1556911220-bff31c812dba", "1600489000022-c2086d79f9d4"],
     summary: "A dark, cramped HDB kitchen opened up with white handleless cabinets, a breakfast island and pendant lighting to make the space feel twice the size.",
     scope: ["Hacking of old cabinets", "Handleless top & bottom cabinets", "Breakfast island", "Sintered stone top", "Pendant lights", "New sink & tap"],
     review: { name: "Alvin Chua", text: "Our kitchen used to be the darkest room. Now it's where everyone hangs out." },
@@ -222,7 +224,7 @@ const PROJECTS = [
   {
     slug: "bedok-bathroom-plumbing", title: "Bathroom re-piping", area: "Bedok", tag: "Plumbing", service: "plumbing",
     property: "HDB · 3-room", duration: "2 days", budget: "S$1.8k–2.4k", year: 2025,
-    img: IMG("1523413651479-597eb2da0ad6", 900), gallery: ["1584622650111-993a426fbf0a", "1585704032915-c3400ca199e7"],
+    img: IMG("1523413651479-597eb2da0ad6", 900), before: PXIMG(5718906), gallery: ["1584622650111-993a426fbf0a", "1585704032915-c3400ca199e7"],
     summary: "Corroded 30-year-old pipes replaced with concealed copper piping, a new instant water heater and modern mixers, without hacking the existing wall tiles.",
     scope: ["Pressure & leak testing", "Concealed copper re-piping", "Instant water heater", "Mixer & shower set", "Basin & waste trap", "PUB-licensed sign-off"],
     review: { name: "Mdm Lee", text: "Strong water pressure again and no more rusty water. Very polite plumbers." },
@@ -230,7 +232,7 @@ const PROJECTS = [
   {
     slug: "queenstown-feature-walls", title: "Feature wall repaint", area: "Queenstown", tag: "Painting", service: "painting",
     property: "HDB · 5-room", duration: "2 days", budget: "S$2.2k–2.8k", year: 2025,
-    img: IMG("1631679706909-1844bbd07221", 900), gallery: ["1541123603104-512919d6a96c", "1618221195710-dd6b41faaea6"],
+    img: IMG("1631679706909-1844bbd07221", 900), before: PXIMG(5641337), gallery: ["1541123603104-512919d6a96c", "1618221195710-dd6b41faaea6"],
     summary: "A warm, neutral palette across the living, dining and two bedrooms, with a limewash feature wall behind the sofa, all using low-VOC paint so the family could stay in.",
     scope: ["Colour consultation", "Wall patching & sanding", "Low-VOC emulsion", "Limewash feature wall", "Ceiling repaint", "Furniture covering"],
     review: { name: "Nurul Aziz", text: "Zero smell, done over a weekend and the limewash wall is everyone's favourite." },
@@ -238,7 +240,7 @@ const PROJECTS = [
   {
     slug: "yishun-aircon-overhaul", title: "Bedroom aircon overhaul", area: "Yishun", tag: "Aircon", service: "aircon",
     property: "HDB · 4-room", duration: "1 day", budget: "S$600–900", year: 2025,
-    img: IMG("1600607687644-c7171b42498f", 900), gallery: ["1586023492125-27b2c045efd7", "1600607687644-c7171b42498f"],
+    img: IMG("1600607687644-c7171b42498f", 900), before: PXIMG(8469950), gallery: ["1586023492125-27b2c045efd7", "1600607687644-c7171b42498f"],
     summary: "Three weak, leaking fan coils fully dismantled and chemically overhauled, with gas topped up and the drainage re-routed to stop the dripping for good.",
     scope: ["Full dismantle of 3 fan coils", "Chemical overhaul", "Gas pressure check & top-up", "Drain pipe re-routing", "Condenser wash", "Performance test"],
     review: { name: "Siti Rahman", text: "The bedrooms are properly cold again and the dripping has completely stopped." },
@@ -246,7 +248,7 @@ const PROJECTS = [
   {
     slug: "marine-parade-hallway-mounting", title: "Hallway mirrors & shelving", area: "Marine Parade", tag: "Mounting", service: "drilling",
     property: "Condo · 2-bedroom", duration: "4 hours", budget: "S$350–500", year: 2025,
-    img: IMG("1581858726788-75bc0f6a952d", 900), gallery: ["1558618666-fcd25c85cd64", "1581858726788-75bc0f6a952d"],
+    img: IMG("1581858726788-75bc0f6a952d", 900), before: PXIMG(6566833), gallery: ["1558618666-fcd25c85cd64", "1581858726788-75bc0f6a952d"],
     summary: "A floating console, round mirror, art rail and concealed cable trunking, all laser-levelled and anchored properly into concrete walls.",
     scope: ["Pipe & cable detection", "Floating console mounting", "Mirror & art rail", "Concealed trunking", "Laser levelling", "Dust-free drilling"],
     review: { name: "Ben Tay", text: "Everything is perfectly level and there's not a speck of dust. Quick and tidy." },
@@ -254,7 +256,7 @@ const PROJECTS = [
   {
     slug: "novena-clinic-refit", title: "Medical clinic refit", area: "Novena", tag: "Renovation", service: "electrical",
     property: "Commercial · Clinic", duration: "4 weeks", budget: "S$45k–55k", year: 2025,
-    img: IMG("1519494026892-80bbd2d6fd0d", 900), gallery: ["1497366216548-37526070297c", "1497366811353-6870744d04b2"],
+    img: IMG("1519494026892-80bbd2d6fd0d", 900), before: PXIMG(15798783), gallery: ["1497366216548-37526070297c", "1497366811353-6870744d04b2"],
     summary: "A GP clinic refit carried out over nights and weekends so patients were never turned away, with new consult rooms, clinical lighting, hand-wash points and an accessible toilet.",
     scope: ["Night & weekend phasing", "Drywall consult rooms", "Clinical-grade lighting", "Hand-wash points & plumbing", "Accessible toilet", "Fire safety sign-off"],
     review: { name: "Dr. Aaron Seah", text: "We didn't lose a single clinic day. Their site lead coordinated with building management so we never had to." },
@@ -262,7 +264,7 @@ const PROJECTS = [
   {
     slug: "jurong-east-cafe-fitout", title: "Neighbourhood café fit-out", area: "Jurong East", tag: "Construction", service: "plumbing",
     property: "Commercial · F&B", duration: "5 weeks", budget: "S$38k–46k", year: 2024,
-    img: IMG("1554118811-1e0d58224f24", 900), gallery: ["1501339847302-ac426a4a7cbb", "1445116572660-236099ec97a0"],
+    img: IMG("1554118811-1e0d58224f24", 900), before: PXIMG(14541104), gallery: ["1501339847302-ac426a4a7cbb", "1445116572660-236099ec97a0"],
     summary: "An empty shell unit turned into a 40-seat café, including grease-trap plumbing, kitchen exhaust, a feature bar counter and an SFA-compliant layout.",
     scope: ["SFA-compliant layout", "Grease trap & floor traps", "Kitchen exhaust ducting", "3-phase power upgrade", "Bar counter carpentry", "Tiling & feature lighting"],
     review: { name: "Hui Min Goh", text: "Opened on the date we promised our landlord. The bar counter is what everyone photographs." },

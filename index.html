@@ -36,10 +36,13 @@
         </div>
       </div>
 
-      <div class="hero-media">
-        <img data-parallax src="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=2000&q=80&auto=format&fit=crop" alt="Construction cranes beside modern Singapore towers">
-        <div class="hero-float"><span class="hf-ico" id="hfIco"></span><div><b>~30 min</b><span>Average arrival time</span></div></div>
-        <div class="hero-float right"><span class="hf-ico" style="background:#fff;color:#141311" id="hfIco2"></span><div><b>3–5 yr</b><span>Warranty on waterproofing</span></div></div>
+      <div class="hero-stage">
+        <div class="hero-media">
+          <div class="reel" id="reel" data-parallax aria-roledescription="carousel" aria-label="Our trades at work"></div>
+          <div class="reel-bar" id="reelBar" role="tablist" aria-label="Choose a trade"></div>
+          <div class="hero-float"><span class="hf-ico" id="hfIco"></span><div><b>~30 min</b><span>Average arrival time</span></div></div>
+          <div class="hero-float right"><span class="hf-ico" style="background:#fff;color:#141311" id="hfIco2"></span><div><b>3–5 yr</b><span>Warranty on waterproofing</span></div></div>
+        </div>
 
         <form class="finder" id="finder">
           <label><small>Service</small><select id="fService"></select></label>
@@ -62,10 +65,64 @@
       <div class="section-head split">
         <div>
           <span class="eyebrow reveal">Why Ferron</span>
-          <h2 class="display h2 reveal" style="margin-top:20px">One trusted crew for <span class="serif">every</span> fix, upgrade &amp; renovation.</h2>
+          <h2 class="display h2 reveal" style="margin-top:20px">Six reasons homeowners <span class="serif ember">choose us.</span></h2>
         </div>
-        <p class="lead reveal">From a tripped circuit at midnight to a full kitchen makeover, our in-house team handles it end-to-end — no subcontractor roulette, no surprise invoices.</p>
+        <div class="reasons-side">
+          <p class="lead reveal">From a tripped circuit at midnight to a full kitchen makeover, one trusted crew handles every fix, upgrade and renovation — no subcontractor roulette, no surprise invoices.</p>
+          <div class="car-nav reveal"><button id="rsPrev" aria-label="Previous reason"></button><button id="rsNext" aria-label="Next reason"></button></div>
+        </div>
       </div>
+      <div class="carousel reasons" id="reasons">
+        <article class="reason reveal" style="--d:0.00s">
+          <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=900&q=75&auto=format&fit=crop" alt="Licensed technician in a hard hat" loading="lazy">
+          <div class="reason-top"><span class="reason-ico"><i data-i="award"></i></span><span class="reason-num">01</span></div>
+          <div class="reason-body">
+            <h3>Licensed &amp; insured pros</h3>
+            <p>EMA-licensed electricians, PUB-licensed plumbers and BCA-registered contractors — background-checked, uniformed and covered by insurance on every job.</p>
+          </div>
+        </article>
+        <article class="reason reveal" style="--d:0.08s">
+          <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=900&q=75&auto=format&fit=crop" alt="Preparing an itemised quote from drawings" loading="lazy">
+          <div class="reason-top"><span class="reason-ico"><i data-i="tag"></i></span><span class="reason-num">02</span></div>
+          <div class="reason-body">
+            <h3>Fixed price before we start</h3>
+            <p>You approve a written, itemised quote before any work begins. The price we agree is the price you pay — no call-out surprises.</p>
+          </div>
+        </article>
+        <article class="reason reveal" style="--d:0.16s">
+          <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=900&q=75&auto=format&fit=crop" alt="Technician working on site with power tools" loading="lazy">
+          <div class="reason-top"><span class="reason-ico"><i data-i="clock"></i></span><span class="reason-num">03</span></div>
+          <div class="reason-body">
+            <h3>On time, or we call ahead</h3>
+            <p>Two-hour arrival windows, live ETA by WhatsApp, and crews stationed across all five regions for ~30 min average arrival.</p>
+          </div>
+        </article>
+        <article class="reason reveal" style="--d:0.00s">
+          <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=900&q=75&auto=format&fit=crop" alt="Technician cleaning a window after a job" loading="lazy">
+          <div class="reason-top"><span class="reason-ico"><i data-i="check"></i></span><span class="reason-num">04</span></div>
+          <div class="reason-body">
+            <h3>Spotless clean-up promise</h3>
+            <p>Floor protection goes down first, and we sweep, wipe and haul away debris before we leave. Your home looks better than we found it.</p>
+          </div>
+        </article>
+        <article class="reason reveal" style="--d:0.08s">
+          <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?w=900&q=75&auto=format&fit=crop" alt="Finished modern kitchen renovation" loading="lazy">
+          <div class="reason-top"><span class="reason-ico"><i data-i="shield"></i></span><span class="reason-num">05</span></div>
+          <div class="reason-body">
+            <h3>Workmanship warranty</h3>
+            <p>Every job is backed by a written warranty — 12 months on repairs and up to 5 years on waterproofing and renovation.</p>
+          </div>
+        </article>
+        <article class="reason reveal" style="--d:0.16s">
+          <img src="https://images.unsplash.com/photo-1574359411659-15573a27fd0c?w=900&q=75&auto=format&fit=crop" alt="Painting crew working on ladders" loading="lazy">
+          <div class="reason-top"><span class="reason-ico"><i data-i="users"></i></span><span class="reason-num">06</span></div>
+          <div class="reason-body">
+            <h3>One in-house crew, end to end</h3>
+            <p>Electrical, plumbing, carpentry and painting under one team and one project lead — no subcontractor hand-offs, one number to call.</p>
+          </div>
+        </article>
+      </div>
+      <div class="rs-progress" id="rsProgress" aria-hidden="true"><i></i></div>
       <div class="stats">
         <div class="stat reveal"><b><span data-count="12">0</span><sup>+</sup></b><span>Years serving Singapore</span></div>
         <div class="stat reveal" style="--d:.1s"><b><span data-count="18500">0</span><sup>+</sup></b><span>Jobs completed</span></div>
@@ -108,17 +165,32 @@
           </div>
           <div class="region-filter" id="regionFilter"></div>
           <div class="area-list" id="areaList"></div>
-          <div class="loc-panel" id="locPanel">
-            <span class="eyebrow" style="color:rgba(255,255,255,.7)">Selected area</span>
-            <b id="lpName">Pick an area</b>
-            <p id="lpMeta">Hover the map or choose from the list to see local response times.</p>
-            <a class="btn btn-ember" id="lpLink" href="#locations">View area page</a>
-            <a class="lp-all" href="areas.html">Browse all areas →</a>
-          </div>
         </div>
-        <div class="sg-map reveal" style="--d:.15s">
-          <div id="sgMap"></div>
-          <div class="map-legend"><span><i></i> Service hub</span><span><i class="e"></i> Selected</span><span>All 5 regions · 7 days a week</span></div>
+        <div class="loc-right">
+          <div class="sg-map snap reveal" style="--d:.15s">
+            <div class="snap-viewport" id="snapView">
+              <div class="snap-stage" id="snapStage">
+                <div id="sgMap"></div>
+                <div class="snap-layer" id="snapLayer"></div>
+              </div>
+            </div>
+            <div class="snap-top">
+              <span class="snap-live"><i></i> Live · <b id="snapCount">18</b> pros on jobs now</span>
+              <button class="snap-btn" id="snapRecenter" aria-label="Centre map on selected area"><i data-i="pin"></i></button>
+            </div>
+            <div class="snap-legend"><span><i class="heat"></i> Busy right now</span><span><i class="ava"></i> Technician on the way</span><span><i class="dot"></i> Service area</span></div>
+          </div>
+          <div class="loc-panel reveal" id="locPanel" aria-live="polite">
+            <div class="lp-info">
+              <span class="eyebrow" style="color:rgba(255,255,255,.7)">Selected area</span>
+              <b id="lpName">Pick an area</b>
+              <p id="lpMeta">Hover the map or choose from the list to see local response times.</p>
+            </div>
+            <div class="lp-actions">
+              <a class="btn btn-ember" id="lpLink" href="#locations">View area page</a>
+              <a class="lp-all" href="areas.html">Browse all areas →</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -130,20 +202,18 @@
       <div class="section-head split">
         <div>
           <span class="eyebrow reveal">The Ferron difference</span>
-          <h2 class="display h2 reveal" style="margin-top:20px">Drag to see the <span class="serif ember">transformation.</span></h2>
+          <h2 class="display h2 reveal" style="margin-top:20px">Watch the <span class="serif ember">transformation.</span></h2>
         </div>
-        <p class="lead reveal">A 25-year-old 4-room HDB in Toa Payoh — rewired, repainted, re-floored and fitted with custom carpentry in just 19 working days.</p>
+        <p class="lead reveal" id="bavLead">A 25-year-old 4-room HDB in Toa Payoh — rewired, repainted, re-floored and fitted with custom carpentry in just 19 working days.</p>
       </div>
-      <div class="ba reveal" id="ba">
-        <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1800&q=80&auto=format&fit=crop" alt="After renovation">
-        <img class="before" src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1800&q=80&auto=format&fit=crop" alt="Before renovation">
-        <span class="ba-tag l">Before</span><span class="ba-tag r">After</span>
-        <div class="ba-handle"></div>
+      <div class="bav reveal" id="bav" aria-roledescription="carousel" aria-label="Before and after transformations">
+        <div class="bav-stage" id="bavStage"></div>
+        <div class="bav-tabs" id="bavTabs" role="tablist" aria-label="Choose a transformation"></div>
       </div>
       <div class="ba-meta">
-        <div class="reveal"><small>Scope</small><b>Full home refresh</b></div>
-        <div class="reveal" style="--d:.08s"><small>Timeline</small><b>19 working days</b></div>
-        <div class="reveal" style="--d:.16s"><small>Services</small><b>Electrical · Paint · Floor</b></div>
+        <div class="reveal"><small>Scope</small><b id="bavScope">Full home refresh</b></div>
+        <div class="reveal" style="--d:.08s"><small>Timeline</small><b id="bavTime">19 working days</b></div>
+        <div class="reveal" style="--d:.16s"><small>Services</small><b id="bavSvc">Electrical · Paint · Floor</b></div>
         <div class="reveal" style="--d:.24s"><small>Client rating</small><b>★★★★★</b></div>
       </div>
     </div>
@@ -159,27 +229,18 @@
         </div>
         <p class="lead reveal">A simple, transparent process — so you always know what's happening, who's coming, and what it costs.</p>
       </div>
-      <div class="process">
-        <div class="step reveal"><span class="step-n">01</span><div><span class="time"><i data-i="clock"></i> 2 min</span><h3>Book online</h3><p>Tell us what's wrong via the form or WhatsApp — photos help us quote faster.</p></div></div>
-        <div class="step reveal" style="--d:.1s"><span class="step-n">02</span><div><span class="time"><i data-i="clock"></i> 15 min</span><h3>We confirm</h3><p>A coordinator calls back to confirm details and lock in a slot that suits you.</p></div></div>
-        <div class="step reveal" style="--d:.2s"><span class="step-n">03</span><div><span class="time"><i data-i="clock"></i> On-site</span><h3>Fixed quote</h3><p>Our technician inspects and gives a firm price. No work starts until you approve.</p></div></div>
-        <div class="step reveal" style="--d:.3s"><span class="step-n">04</span><div><span class="time"><i data-i="clock"></i> Same day</span><h3>Job done</h3><p>Work completed, site cleaned, warranty issued. Pay by PayNow, card or cash.</p></div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ HOW WE WORK ============ -->
-  <section class="section ba-section" id="how-we-work">
-    <div class="container">
-      <div class="section-head split">
-        <div>
-          <span class="eyebrow reveal">How we work</span>
-          <h2 class="display h2 reveal" style="margin-top:20px">Four commitments on <span class="serif ember">every</span> job site.</h2>
+      <div class="flow reveal" id="flow">
+        <ol class="flow-steps" id="flowSteps"></ol>
+        <div class="flow-phone" aria-live="polite">
+          <div class="fp-head"><span class="fp-ava" id="fpAva"></span><div><b>Ferron Construction</b><small><i></i> Typically replies in minutes</small></div></div>
+          <div class="fp-chat" id="flowChat"></div>
+          <div class="fp-foot"><span>Message</span><span class="fp-send" id="fpSend"></span></div>
         </div>
-        <p class="lead reveal">Every crew signs up to the same four standards, whether it's a dripping tap or a nine-week extension, and we track how well we keep them.</p>
       </div>
-      <div class="pillars" id="pillars"></div>
-      <div class="stats" id="impact"></div>
+      <div class="flow-cta reveal">
+        <a class="btn btn-ember btn-lg" href="#quote">Start with step 1 <i data-i="arrow"></i></a>
+        <a class="btn btn-wa btn-lg" id="flowWa" target="_blank" rel="noopener">Book on WhatsApp</a>
+      </div>
     </div>
   </section>
 
@@ -201,16 +262,24 @@
   <!-- ============ CERTIFICATES & BRANDS ============ -->
   <section class="section" id="trust" style="padding-bottom:0">
     <div class="container">
-      <div class="trust reveal">
-        <div>
-          <span class="eyebrow">Certificates &amp; accreditation</span>
-          <h2>Licensed, certified and <span class="serif ember">audited.</span></h2>
-          <p>We hold the licences Singapore requires for electrical, plumbing and building work, and we're audited every year against international quality and safety standards.</p>
-          <div class="cert-chips" id="certChips"></div>
-          <button class="btn btn-ghost" data-open-certs>View our certificates <i data-i="arrow"></i></button>
+      <div class="creds reveal">
+        <div class="creds-head">
+          <div>
+            <span class="eyebrow">Certificates &amp; accreditation</span>
+            <h2>Licensed, certified and <span class="serif ember">audited.</span></h2>
+          </div>
+          <div class="creds-side">
+            <p>We hold every licence Singapore requires for electrical, plumbing and building work — and we're audited every year against international quality and safety standards.</p>
+            <div class="creds-score">
+              <span class="cs-ring"><b>6/6</b></span>
+              <div><b>All licences active</b><small>Last external audit: Mar 2026 · Next: Mar 2027</small></div>
+              <button class="btn btn-ember" data-open-certs>View certificates <i data-i="arrow"></i></button>
+            </div>
+          </div>
         </div>
-        <div>
-          <div class="brands-label">Brands we install &amp; service</div>
+        <div class="creds-grid" id="credGrid"></div>
+        <div class="creds-brands">
+          <span class="brands-label">Brands we install &amp; service</span>
           <div id="brands"></div>
         </div>
       </div>
@@ -242,9 +311,12 @@
           <span class="eyebrow reveal">Latest updates</span>
           <h2 class="display h2 reveal" style="margin-top:20px">News, guides &amp; <span class="serif">site notes.</span></h2>
         </div>
-        <p class="lead reveal">Seasonal maintenance tips, permit guides and what's new at Ferron, written by the people doing the work.</p>
+        <div class="nx-side">
+          <p class="lead reveal">Seasonal maintenance tips, permit guides and what's new at Ferron, written by the people doing the work.</p>
+          <div class="nx-cats reveal" id="newsCats" role="tablist" aria-label="Filter updates"></div>
+        </div>
       </div>
-      <div class="news-grid" id="newsGrid"></div>
+      <div class="nx reveal" id="newsX" aria-live="polite"></div>
       <div class="more-link reveal"><a class="btn btn-ghost btn-lg" href="insights.html">All insights <i data-i="arrow"></i></a></div>
     </div>
   </section>

@@ -262,8 +262,11 @@ const projBySlug = (s) => PROJECTS.find((x) => x.slug === s);
 const areaSlug = (name) => LOCATIONS.find((l) => l.name === name)?.slug || "";
 
 const projectCard = (p, i = 0) => `
-  <a class="pj reveal" style="--d:${(i % 3) * 0.1}s" href="project.html?p=${p.slug}">
-    <img src="${p.img}" alt="${p.title}" loading="lazy">
+  <a class="pj reveal${p.before ? " pj-ba" : ""}" style="--d:${(i % 3) * 0.1}s;--ba-delay:${-(i % 4) * 1.6}s" href="project.html?p=${p.slug}">
+    <img src="${p.img}" alt="${p.title} — after" loading="lazy">${p.before ? `
+    <img class="pj-before" src="${p.before}" alt="${p.title} — before" loading="lazy">
+    <span class="pj-line"></span>
+    <span class="pj-state"><span class="b">Before</span><span class="a">After</span></span>` : ""}
     <span class="pj-tag">${p.tag}</span>
     <div class="pj-info"><div><b>${p.title}</b><span>${icon("pin")} ${p.area}</span></div>${icon("arrowUR")}</div>
   </a>`;
@@ -404,6 +407,108 @@ function sgMapSVG() {
   }).join("");
   return `<svg class="map" viewBox="0 0 800 400" role="img" aria-label="Map of Singapore service areas">
     ${grid}<path class="island" d="${d}" stroke-linejoin="round"/>${pins}</svg>`;
+}
+
+/* ---------- Snapchat-style live service map (home + areas) ----------
+   Markup: snapMapMarkup() inside .sg-map.snap; then #sgMap ← snapMapSVG(), initSnapMap(onSelect),
+   and call snapFocus(location) whenever the selected area changes. */
+const snapMapMarkup = () => `
+  <div class="snap-viewport" id="snapView">
+    <div class="snap-stage" id="snapStage"><div id="sgMap"></div><div class="snap-layer" id="snapLayer"></div></div>
+  </div>
+  <div class="snap-top">
+    <span class="snap-live"><i></i> Live · <b id="snapCount">18</b> pros on jobs now</span>
+    <button class="snap-btn" id="snapRecenter" aria-label="Centre map on selected area">${icon("pin")}</button>
+  </div>
+  <div class="snap-legend"><span><i class="heat"></i> Busy right now</span><span><i class="ava"></i> Technician on the way</span><span><i class="dot"></i> Service area</span></div>`;
+
+// Deterministic 0..1 "how busy" score per area, so the heat map is stable between loads
+function snapHeat(slug) { return [...slug].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 997, 7) / 997; }
+function snapPct(slug) { const [x, y] = proj(LOC_COORDS[slug]); return [x / 8, y / 4]; }
+
+function snapMapSVG() {
+  const island = "M" + SG_OUTLINE.map((p) => proj(p).join(",")).join(" L") + " Z";
+  const line = (slugs) => "M" + slugs.map((s) => proj(LOC_COORDS[s]).join(",")).join(" L");
+  const roads = [
+    ["jurong-west", "jurong-east", "clementi", "bukit-timah", "toa-payoh", "serangoon", "hougang", "tampines", "changi"],
+    ["queenstown", "bukit-timah", "novena", "bishan", "ang-mo-kio", "yishun", "sembawang"],
+    ["bukit-batok", "woodlands"], ["marine-parade", "bedok", "tampines", "pasir-ris"], ["sengkang", "punggol"], ["ang-mo-kio", "sengkang"],
+  ].map(line);
+  const heat = LOCATIONS.map((l, i) => {
+    const [x, y] = proj(LOC_COORDS[l.slug]); const h = snapHeat(l.slug);
+    return `<circle class="heat" cx="${x}" cy="${y}" r="${(22 + h * 34).toFixed(0)}" style="--hd:${(i % 7) * 0.45}s;--ho:${(0.45 + h * 0.5).toFixed(2)}"/>`;
+  }).join("");
+  const pins = LOCATIONS.map((l) => {
+    const [x, y] = proj(LOC_COORDS[l.slug]);
+    return `<a href="location.html?area=${l.slug}" class="pin-dot" data-slug="${l.slug}" data-region="${l.region}">
+      <circle class="halo" cx="${x}" cy="${y}" r="18"/><circle class="c" cx="${x}" cy="${y}" r="4.5"/>
+      <text x="${x}" y="${y + 17}" text-anchor="middle">${l.name}</text></a>`;
+  }).join("");
+  return `<svg class="map" viewBox="0 0 800 400" role="img" aria-label="Live map of Singapore service areas">
+    <defs>
+      <radialGradient id="snapHeat"><stop offset="0" stop-color="#ff3b1f" stop-opacity=".95"/><stop offset=".35" stop-color="#ff7a1f" stop-opacity=".7"/><stop offset=".7" stop-color="#ffd23f" stop-opacity=".35"/><stop offset="1" stop-color="#ffd23f" stop-opacity="0"/></radialGradient>
+      <filter id="snapShadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#2a6f8f" flood-opacity=".28"/></filter>
+      <filter id="snapBlur"><feGaussianBlur stdDeviation="5"/></filter>
+      <clipPath id="snapClip"><path d="${island}"/></clipPath>
+    </defs>
+    <path class="island" d="${island}" stroke-linejoin="round" filter="url(#snapShadow)"/>
+    <g clip-path="url(#snapClip)">
+      <ellipse class="park" cx="${proj([103.81, 1.36]).join('" cy="')}" rx="46" ry="30"/>
+      <ellipse class="park" cx="${proj([103.70, 1.40]).join('" cy="')}" rx="40" ry="22"/>
+      <ellipse class="park" cx="${proj([103.98, 1.37]).join('" cy="')}" rx="22" ry="14"/>
+      ${roads.map((d) => `<path class="road-out" d="${d}"/>`).join("")}${roads.map((d) => `<path class="road" d="${d}"/>`).join("")}
+      <g filter="url(#snapBlur)" style="mix-blend-mode:multiply">${heat}</g>
+    </g>
+    ${pins}</svg>`;
+}
+
+function initSnapMap(onSelect) {
+  const SNAP_PROS = [
+    { name: "Ravi", trade: "Electrician", icon: "bolt", slug: "toa-payoh", bg: "ffd5dc" },
+    { name: "Mei Ling", trade: "Painter", icon: "roller", slug: "tampines", bg: "c0aede" },
+    { name: "Arif", trade: "Plumber", icon: "drop", slug: "jurong-east", bg: "b6e3f4" },
+    { name: "Daniel", trade: "Carpenter", icon: "cabinet", slug: "woodlands", bg: "d1d4f9" },
+    { name: "Siti", trade: "Aircon tech", icon: "wind", slug: "punggol", bg: "ffdfbf" },
+    { name: "Kumar", trade: "Handyman", icon: "drill", slug: "queenstown", bg: "c1f0d1" },
+  ];
+  const ava = (p) => `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(p.name)}&backgroundColor=${p.bg}`;
+  $("#snapLayer").innerHTML = SNAP_PROS.map((p, i) => {
+    const [x, y] = snapPct(p.slug); const l = locBySlug(p.slug);
+    return `<button class="snap-pro" data-slug="${p.slug}" style="left:${x}%;top:${y}%;--bd:${i * 0.35}s" aria-label="${p.name}, ${p.trade}, near ${l.name}">
+      <span class="snap-ava"><img src="${ava(p)}" alt="" loading="lazy"><em>${icon(p.icon)}</em></span>
+      <span class="snap-tag"><span><b>${p.name}</b> · ${Math.max(4, l.eta - 22)} min</span><small>${p.trade} · ${l.name}</small></span>
+    </button>`;
+  }).join("") + `<a class="snap-callout" id="snapCallout" href="#"></a>`;
+  $$(".snap-pro").forEach((b) => b.addEventListener("click", () => onSelect(b.dataset.slug)));
+  $("#snapRecenter").addEventListener("click", () => snapCenter(true));
+
+  // Drag-to-pan on the (scrollable) map viewport, like a real map
+  const v = $("#snapView"); let drag = null;
+  v.addEventListener("pointerdown", (e) => { if (e.pointerType === "mouse" && v.scrollWidth > v.clientWidth) drag = { x: e.clientX, y: e.clientY, l: v.scrollLeft, t: v.scrollTop }; });
+  addEventListener("pointermove", (e) => { if (drag) { v.scrollLeft = drag.l - (e.clientX - drag.x); v.scrollTop = drag.t - (e.clientY - drag.y); } });
+  addEventListener("pointerup", () => { drag = null; });
+
+  // Gently tick the live counter so the map feels alive
+  setInterval(() => { const n = $("#snapCount"); n.textContent = 15 + Math.floor(Math.random() * 8); }, 4500);
+}
+
+function snapFocus(l) {
+  window.snapSlug = l.slug;
+  const [x, y] = snapPct(l.slug);
+  const near = 2 + Math.round(snapHeat(l.slug) * 5);
+  const c = $("#snapCallout");
+  c.href = `location.html?area=${l.slug}`;
+  c.style.left = `${x}%`; c.style.top = `${y}%`;
+  c.innerHTML = `<b>${l.name}</b><span>~${l.eta} min · ${near} pros nearby</span>${icon("arrowUR")}`;
+  c.classList.toggle("high", !!$(`.snap-pro[data-slug="${l.slug}"]`)); // lift above an avatar standing here
+  c.classList.remove("pop"); void c.offsetWidth; c.classList.add("pop");
+  $$(".snap-pro").forEach((b) => b.classList.toggle("on", b.dataset.slug === l.slug));
+  snapCenter(false);
+}
+function snapCenter(smooth) {
+  const v = $("#snapView"); if (!window.snapSlug || v.scrollWidth <= v.clientWidth) return;
+  const [x, y] = snapPct(window.snapSlug); const st = $("#snapStage");
+  v.scrollTo({ left: st.offsetWidth * x / 100 - v.clientWidth / 2, top: st.offsetHeight * y / 100 - v.clientHeight / 2, behavior: smooth ? "smooth" : "auto" });
 }
 
 /* Replace <i data-i="name"> hooks in static markup with SVG icons */

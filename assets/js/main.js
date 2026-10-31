@@ -11,10 +11,10 @@ const waLink = (msg = "Hi Ferron, I'd like a quote.") => `https://wa.me/${COMPAN
 const svcBySlug = (s) => SERVICES.find((x) => x.slug === s);
 const locBySlug = (s) => LOCATIONS.find((x) => x.slug === s);
 const priceLabel = (s) => `From S$${s.from}${s.unit || ""}`;
-const AV_COLORS = ["#ff5b1f", "#141311", "#5b6cff", "#16a37f", "#c2410c", "#7c3aed"];
+const AV_COLORS = ["var(--ember)", "var(--ink)", "#5b6cff", "#16a37f", "#c2410c", "#7c3aed"];
 
 const LOGO = `
-  <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V9l8-5 8 5v11"/><path d="M9 20v-6h6v6"/></svg></span>
+  <span class="logo-mark"><img src="assets/img/logo.png" alt="" width="44" height="32"></span>
   <span>Ferron<small>CONSTRUCTION · SG</small></span>`;
 
 const COMPANY_PAGES = [
@@ -85,7 +85,7 @@ function renderLayout(active = "") {
   <div class="drawer" id="drawer" aria-hidden="true">
     <div class="drawer-head">
       <a href="index.html" class="logo" style="color:#fff">${LOGO}</a>
-      <button class="burger" id="drawerClose" style="display:grid;background:#fff;color:#141311" aria-label="Close menu">${icon("x")}</button>
+      <button class="burger" id="drawerClose" style="display:grid;background:#fff;color:var(--ink)" aria-label="Close menu">${icon("x")}</button>
     </div>
     <nav>
       <a href="index.html">Home ${icon("arrowUR")}</a>
@@ -180,6 +180,8 @@ function renderLayout(active = "") {
   });
   initDialog(certModal);
 
+  initPalette();
+
   // nav state
   const nav = $("#nav");
   const onScroll = () => nav.classList.toggle("scrolled", scrollY > 40);
@@ -192,6 +194,46 @@ function renderLayout(active = "") {
   $("#burger").onclick = () => toggle(true);
   $("#drawerClose").onclick = () => toggle(false);
   $$("#drawer a").forEach((a) => a.addEventListener("click", () => toggle(false)));
+}
+
+/* ---------- Colour palettes (values live in style.css under [data-palette]) ---------- */
+const PALETTES = [
+  { key: "ferron", name: "Ferron Grey", note: "From the crew T-shirt", sw: ["#eceef2", "#23242a", "#c4175c"] },
+  { key: "steel", name: "Ferron Steel", note: "Blue-grey & magenta", sw: ["#d9dde5", "#1c1d22", "#b8124f"] },
+  { key: "ocean", name: "Ocean Slate", note: "Cool grey & blue", sw: ["#edf0f3", "#15202b", "#1f6fd1"] },
+  { key: "forest", name: "Forest Stone", note: "Warm stone & green", sw: ["#f1efe9", "#161a16", "#1f7a4d"] },
+  { key: "ember", name: "Ember Classic", note: "Concrete & orange", sw: ["#f4f1eb", "#141311", "#ff5b1f"] },
+];
+
+function setPalette(key) {
+  if (!PALETTES.some((p) => p.key === key)) key = "ferron";
+  if (key === "ferron") delete document.documentElement.dataset.palette;
+  else document.documentElement.dataset.palette = key;
+  try { localStorage.setItem("ferron-palette", key); } catch (e) {}
+  $$("#palette [data-pal]").forEach((b) => b.setAttribute("aria-checked", b.dataset.pal === key));
+}
+
+function initPalette() {
+  const cur = document.documentElement.dataset.palette || "ferron";
+  const dots = (sw) => sw.map((c) => `<i style="background:${c}"></i>`).join("");
+  document.body.insertAdjacentHTML("beforeend", `
+  <div class="palette" id="palette">
+    <button class="palette-toggle" aria-expanded="false" aria-controls="palettePanel" aria-label="Change colour palette">${dots(PALETTES[0].sw)}</button>
+    <div class="palette-panel" id="palettePanel" role="radiogroup" aria-label="Colour palette" hidden>
+      <b>Colour palette</b>
+      ${PALETTES.map((p) => `
+      <button role="radio" data-pal="${p.key}" aria-checked="${p.key === cur}">
+        <span class="sw">${dots(p.sw)}</span><span><strong>${p.name}</strong><small>${p.note}</small></span>
+      </button>`).join("")}
+    </div>
+  </div>`);
+  const wrap = $("#palette"), btn = $(".palette-toggle", wrap), panel = $("#palettePanel");
+  const open = (on) => { panel.hidden = !on; btn.setAttribute("aria-expanded", on); };
+  btn.onclick = () => open(panel.hidden);
+  panel.onclick = (e) => { const b = e.target.closest("[data-pal]"); if (b) setPalette(b.dataset.pal); };
+  document.addEventListener("click", (e) => { if (!wrap.contains(e.target)) open(false); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") open(false); });
+  if (params.get("palette")) setPalette(params.get("palette")); // shareable ?palette=steel links
 }
 
 /* ---------- Effects ---------- */
@@ -375,7 +417,7 @@ function mountWizard(form) {
   $("#wzNext").onclick = () => {
     if (cur === 3) {
       const name = $("#wzName"), phone = $("#wzPhone");
-      [name, phone].forEach((f) => (f.style.boxShadow = f.value.trim() ? "" : "inset 0 0 0 2px #e2470f"));
+      [name, phone].forEach((f) => (f.style.boxShadow = f.value.trim() ? "" : "inset 0 0 0 2px var(--ember-deep)"));
       if (!name.value.trim() || !phone.value.trim()) return;
       const s = svcBySlug(form.svc.value), l = locBySlug($("#wzArea").value);
       $("#doneName").textContent = name.value.trim().split(" ")[0];

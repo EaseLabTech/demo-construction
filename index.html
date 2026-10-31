@@ -8,7 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
   <link rel="stylesheet" href="assets/css/style.css">
+  <script>try{var p=new URLSearchParams(location.search).get("palette")||localStorage.getItem("ferron-palette");if(p&&p!=="ferron")document.documentElement.dataset.palette=p}catch(e){}</script>
 </head>
 <body>
 
@@ -19,7 +21,7 @@
       <div class="hero-grid">
         <div>
           <div class="hero-badge">
-            <span class="avatars"><span style="background:#ff5b1f">RT</span><span style="background:#141311">DL</span><span style="background:#5b6cff">PN</span></span>
+            <span class="avatars"><span style="background:var(--ember)">RT</span><span style="background:var(--ink)">DL</span><span style="background:#5b6cff">PN</span></span>
             Rated <b>4.9/5</b> by 1,700+ Singapore homes
           </div>
           <h1 class="display h1">
@@ -41,7 +43,7 @@
           <div class="reel" id="reel" data-parallax aria-roledescription="carousel" aria-label="Our trades at work"></div>
           <div class="reel-bar" id="reelBar" role="tablist" aria-label="Choose a trade"></div>
           <div class="hero-float"><span class="hf-ico" id="hfIco"></span><div><b>~30 min</b><span>Average arrival time</span></div></div>
-          <div class="hero-float right"><span class="hf-ico" style="background:#fff;color:#141311" id="hfIco2"></span><div><b>3–5 yr</b><span>Warranty on waterproofing</span></div></div>
+          <div class="hero-float right"><span class="hf-ico" style="background:#fff;color:var(--ink)" id="hfIco2"></span><div><b>3–5 yr</b><span>Warranty on waterproofing</span></div></div>
         </div>
 
         <form class="finder" id="finder">
@@ -74,7 +76,7 @@
       </div>
       <div class="carousel reasons" id="reasons">
         <article class="reason reveal" style="--d:0.00s">
-          <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=900&q=75&auto=format&fit=crop" alt="Licensed technician in a hard hat" loading="lazy">
+          <img src="assets/img/onsite/ceiling-crack-repair.jpg" alt="Uniformed Ferron technician taping a ceiling crack" loading="lazy">
           <div class="reason-top"><span class="reason-ico"><i data-i="award"></i></span><span class="reason-num">01</span></div>
           <div class="reason-body">
             <h3>Licensed &amp; insured pros</h3>
@@ -90,7 +92,7 @@
           </div>
         </article>
         <article class="reason reveal" style="--d:0.16s">
-          <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=900&q=75&auto=format&fit=crop" alt="Technician working on site with power tools" loading="lazy">
+          <img src="assets/img/onsite/material-delivery.jpg" alt="Ferron crew wheeling wall render to a job" loading="lazy">
           <div class="reason-top"><span class="reason-ico"><i data-i="clock"></i></span><span class="reason-num">03</span></div>
           <div class="reason-body">
             <h3>On time, or we call ahead</h3>
@@ -98,7 +100,7 @@
           </div>
         </article>
         <article class="reason reveal" style="--d:0.00s">
-          <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=900&q=75&auto=format&fit=crop" alt="Technician cleaning a window after a job" loading="lazy">
+          <img src="assets/img/onsite/wall-skim-coat.jpg" alt="Floor and furniture protected while a wall is skim-coated" loading="lazy">
           <div class="reason-top"><span class="reason-ico"><i data-i="check"></i></span><span class="reason-num">04</span></div>
           <div class="reason-body">
             <h3>Spotless clean-up promise</h3>
@@ -114,7 +116,7 @@
           </div>
         </article>
         <article class="reason reveal" style="--d:0.16s">
-          <img src="https://images.unsplash.com/photo-1574359411659-15573a27fd0c?w=900&q=75&auto=format&fit=crop" alt="Painting crew working on ladders" loading="lazy">
+          <img src="assets/img/onsite/hacking-wall.jpg" alt="Ferron crew member hacking a bathroom wall" loading="lazy">
           <div class="reason-top"><span class="reason-ico"><i data-i="users"></i></span><span class="reason-num">06</span></div>
           <div class="reason-body">
             <h3>One in-house crew, end to end</h3>
@@ -240,6 +242,33 @@
       <div class="flow-cta reveal">
         <a class="btn btn-ember btn-lg" href="#quote">Start with step 1 <i data-i="arrow"></i></a>
         <a class="btn btn-wa btn-lg" id="flowWa" target="_blank" rel="noopener">Book on WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ON SITE (client photos & clips) ============ -->
+  <section class="section" id="onsite" style="padding-bottom:0">
+    <div class="container">
+      <div class="section-head split">
+        <div>
+          <span class="eyebrow reveal">On site this month</span>
+          <h2 class="display h2 reveal" style="margin-top:20px">Our crew, <span class="serif ember">on the job.</span></h2>
+        </div>
+        <p class="lead reveal">Hacking, plumbing, painting, drywall: unfiltered photos and clips from recent Ferron jobs. Same crew, same uniform, every time.</p>
+      </div>
+      <div class="onsite" id="onsiteGrid">
+        <figure class="os-tile reveal"><video muted loop playsinline preload="none" poster="assets/video/floor-hacking.jpg" src="assets/video/floor-hacking.mp4" aria-label="Two Ferron crew members hacking bathroom floor tiles"></video><figcaption><span class="os-tag">Video</span>Floor tile hacking</figcaption></figure>
+        <figure class="os-tile reveal" style="--d:.06s"><img src="assets/img/onsite/painting-cornice.jpg" alt="Painting a cornice in an HDB bedroom" loading="lazy"><figcaption><span class="os-tag">Painting</span>Cornice repaint</figcaption></figure>
+        <figure class="os-tile reveal" style="--d:.12s"><img src="assets/img/onsite/kitchen-pipe-repair.jpg" alt="Repairing a pipe inside a kitchen wall cabinet" loading="lazy"><figcaption><span class="os-tag">Plumbing</span>Pipe repair in kitchen cabinet</figcaption></figure>
+        <figure class="os-tile reveal" style="--d:.18s"><img src="assets/img/onsite/hacking-wall.jpg" alt="Hacking off old bathroom wall tiles" loading="lazy"><figcaption><span class="os-tag">Hacking</span>Bathroom wall strip-out</figcaption></figure>
+        <figure class="os-tile reveal"><img src="assets/img/onsite/drywall-install.jpg" alt="Fitting drywall panels over an old wall" loading="lazy"><figcaption><span class="os-tag">Drywall</span>Panel installation</figcaption></figure>
+        <figure class="os-tile reveal" style="--d:.06s"><video muted loop playsinline preload="none" poster="assets/video/demolition-site.jpg" src="assets/video/demolition-site.mp4" aria-label="Walkthrough of a kitchen during demolition"></video><figcaption><span class="os-tag">Video</span>Kitchen demolition</figcaption></figure>
+        <figure class="os-tile reveal" style="--d:.12s"><img src="assets/img/onsite/wall-skim-coat.jpg" alt="Skim-coating a wall with floor protection laid" loading="lazy"><figcaption><span class="os-tag">Reinstatement</span>Wall skim coat</figcaption></figure>
+        <figure class="os-tile reveal" style="--d:.18s"><img src="assets/img/onsite/ceiling-crack-repair.jpg" alt="Taping a ceiling crack with fibreglass mesh" loading="lazy"><figcaption><span class="os-tag">Repairs</span>Ceiling crack repair</figcaption></figure>
+        <figure class="os-tile reveal"><img src="assets/img/onsite/material-delivery.jpg" alt="Delivering bags of wall render to site" loading="lazy"><figcaption><span class="os-tag">Logistics</span>Materials on site</figcaption></figure>
+        <figure class="os-tile reveal" style="--d:.06s"><img src="assets/img/onsite/kitchen-cabinet-plumbing.jpg" alt="Working on plumbing behind kitchen cabinets" loading="lazy"><figcaption><span class="os-tag">Plumbing</span>Cabinet pipe rerouting</figcaption></figure>
+        <figure class="os-tile reveal" style="--d:.12s"><video muted loop playsinline preload="none" poster="assets/video/pipe-point.jpg" src="assets/video/pipe-point.mp4" aria-label="Close-up of a new floor pipe point"></video><figcaption><span class="os-tag">Video</span>New pipe point</figcaption></figure>
+        <figure class="os-tile reveal" style="--d:.18s"><img src="assets/img/onsite/office-director.jpg" alt="Inside the Ferron office in Singapore" loading="lazy"><figcaption><span class="os-tag">HQ</span>Our Singapore office</figcaption></figure>
       </div>
     </div>
   </section>

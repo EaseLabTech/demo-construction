@@ -7,6 +7,8 @@
 const IMG = (id, w = 1200) => `https://images.unsplash.com/photo-${id}?w=${w}&q=75&auto=format&fit=crop`;
 // Pexels photo by id (used for project "before" shots)
 const PXIMG = (id, w = 900) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
+// Client-supplied photos of Ferron crews on real jobs
+const ONSITE = (name) => `assets/img/onsite/${name}.jpg`;
 
 const COMPANY = {
   name: "Ferron Construction",
@@ -40,7 +42,7 @@ const SERVICES = [
     name: "Plumbing",
     icon: "drop",
     tagline: "Leaks, choke clearing & pipe works",
-    img: IMG("1585704032915-c3400ca199e7"),
+    img: ONSITE("kitchen-pipe-repair"),
     from: 50,
     summary: "PUB-licensed plumbers who fix leaks, clear chokes and replace pipes fast — with transparent pricing before any work begins.",
     includes: ["Leak detection & repair", "Toilet / sink choke clearing", "Water heater installation", "Tap & mixer replacement", "Concealed pipe replacement", "Bowl & cistern repair"],
@@ -53,7 +55,7 @@ const SERVICES = [
     name: "Kitchen Cabinets",
     icon: "cabinet",
     tagline: "Custom carpentry built to fit",
-    img: IMG("1556911220-bff31c812dba"),
+    img: ONSITE("kitchen-cabinet-plumbing"),
     from: 180,
     summary: "Made-to-measure cabinets, hinge and door replacements, and quartz or solid-surface tops for kitchens that work as hard as you do.",
     includes: ["Custom cabinet design", "Hinge & door replacement", "Quartz / sintered stone tops", "Soft-close upgrades", "Laminate re-facing", "Termite damage repair"],
@@ -66,7 +68,7 @@ const SERVICES = [
     name: "Painting",
     icon: "roller",
     tagline: "Interior, exterior & feature walls",
-    img: IMG("1562259949-e8e7689d7828"),
+    img: ONSITE("painting-cornice"),
     from: 250,
     summary: "Low-VOC, odour-less paint systems with full furniture protection. Most HDB flats repainted in a single day.",
     includes: ["Whole-home repainting", "Exterior & facade painting", "Feature & accent walls", "Ceiling & stain sealing", "Gate & grille painting", "Eco-friendly paints"],

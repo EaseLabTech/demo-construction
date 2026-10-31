@@ -8,7 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
   <link rel="stylesheet" href="assets/css/style.css">
+  <script>try{var p=new URLSearchParams(location.search).get("palette")||localStorage.getItem("ferron-palette");if(p&&p!=="ferron")document.documentElement.dataset.palette=p}catch(e){}</script>
 </head>
 <body>
 <main id="page"></main>
@@ -263,7 +265,7 @@
   $("#enrolForm").addEventListener("submit", (e) => {
     e.preventDefault();
     const name = $("#enName"), phone = $("#enPhone");
-    [name, phone].forEach((f) => (f.style.boxShadow = f.value.trim() ? "" : "inset 0 0 0 2px #e2470f"));
+    [name, phone].forEach((f) => (f.style.boxShadow = f.value.trim() ? "" : "inset 0 0 0 2px var(--ember-deep)"));
     if (!name.value.trim() || !phone.value.trim()) return;
     const c = COURSES.find((x) => x.slug === $("#enCourse").value);
     $("#enrolWa").href = waLink(`Hi Ferron Academy, I'm ${name.value.trim()}. I'd like a seat on "${c.title}" starting ${fmtDate(c.start)}.${$("#enMember").checked ? " I'm a Ferron customer." : ""}`);

@@ -135,6 +135,15 @@ $("#ctaCall").innerHTML = `${icon("phone")} ${COMPANY.phone}`;
 $("#ctaWa").href = waLink("Hi Ferron, I have an urgent job.");
 $("#ctaWa").insertAdjacentHTML("afterbegin", WA_ICON + " ");
 
+/* ---------- On site: client clips play only while visible ---------- */
+if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (e.isIntersecting) e.target.play().catch(() => {});
+    else e.target.pause();
+  }), { threshold: 0.4 });
+  $$("#onsiteGrid video").forEach((v) => io.observe(v));
+}
+
 initReveal();
 initCounters();
 initParallax();
